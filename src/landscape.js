@@ -18,7 +18,7 @@ export function createLandscape() {
   const HORIZON = 0.82; // lightest sky value, also the fog color
   const ZENITH = 0.62; // sky darkens a touch overhead
   const SPIKE_COUNT = 740;
-  const FIELD_INNER = 16; // bare clearing the camera sits inside
+  const FIELD_INNER = 20; // bare clearing the camera sits inside
   const FIELD_OUTER = 120;
   const ORBIT_RADIUS = 10; // camera orbits inside the clearing, looking outward
   const ORBIT_SPEED = 0.045; // rad/s — a full turn ~140s
@@ -300,7 +300,7 @@ function buildSpikes({ list }) {
   geo.computeVertexNormals();
 
   const mat = new THREE.MeshLambertMaterial({
-    color: new THREE.Color(0.2, 0.2, 0.2), // near-black; the key gives a bright edge
+    color: new THREE.Color(0.15, 0.15, 0.15), // darker than the mid-gray ground so the two read apart
   });
 
   const mesh = new THREE.InstancedMesh(geo, mat, list.length);
@@ -391,7 +391,7 @@ function buildGround({ grid }) {
     // mounds/roots dark), broad mottling + grain break it up, cracks cut dark.
     const mottle = (fbm(x * 0.22 + 17.0, y * 0.22 - 5.0) - 0.5) * 0.18;
     const reliefTint = (rough + fine * 1.5 + bump * 0.4) * 0.1;
-    let g = 0.34 + reliefTint + mottle + (fbm(x * 0.5, y * 0.5) - 0.5) * 0.2;
+    let g = 0.42 + reliefTint + mottle + (fbm(x * 0.5, y * 0.5) - 0.5) * 0.2;
     g *= 1.0 - 0.85 * carve; // carved fractures read as dark lines
     g *= 1.0 - 0.6 * crack - 0.5 * crack2; // extra fine fissures
     g = THREE.MathUtils.clamp(g, 0.04, 0.85);
@@ -400,7 +400,10 @@ function buildGround({ grid }) {
   geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   geo.computeVertexNormals();
 
-  const mat = new THREE.MeshLambertMaterial({ vertexColors: true });
+  const mat = new THREE.MeshLambertMaterial({
+    vertexColors: true,
+    map: makeGroundTexture(), // fine per-pixel detail so close-up ground reads textured too
+  });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.rotation.x = -Math.PI / 2;
   return mesh;
@@ -409,6 +412,71 @@ function buildGround({ grid }) {
 /* ------------------------------------------------------------------------- */
 /* noise helpers (deterministic value noise + fbm)                           */
 /* ------------------------------------------------------------------------- */
+/* Fine, tileable ground detail so the surface reads textured even up close,
+   where the vertex-colour mesh is far too coarse to show anything. Periodic
+   value noise (a few octaves) keyed to a wrap-around lattice -> seamless
+   repeat; used as the ground's diffuse map to multiply the vertex colours. */
+function makeGroundTexture() {
+  const rnd = makeRng(99);
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const img = ctx.createImageData(size, size);
+
+  const octaves = [
+    { period: 6, amp: 0.5 },
+    { period: 13, amp: 0.32 },
+    { period: 29, amp: 0.18 },
+  ];
+  const lat = octaves.map((o) => {
+    const a = new Float32Array(o.period * o.period);
+    for (let i = 0; i < a.length; i++) a[i] = rnd();
+    return a;
+  });
+  const smooth = (t) => t * t * (3 - 2 * t);
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      let v = 0;
+      for (let k = 0; k < octaves.length; k++) {
+        const P = octaves[k].period;
+        const L = lat[k];
+        const fx = (x / size) * P;
+        const fy = (y / size) * P;
+        const ix = Math.floor(fx);
+        const iy = Math.floor(fy);
+        const x0 = ((ix % P) + P) % P;
+        const y0 = ((iy % P) + P) % P;
+        const x1 = (x0 + 1) % P;
+        const y1 = (y0 + 1) % P;
+        const tx = smooth(fx - ix);
+        const ty = smooth(fy - iy);
+        v +=
+          octaves[k].amp *
+          (L[y0 * P + x0] * (1 - tx) * (1 - ty) +
+            L[y0 * P + x1] * tx * (1 - ty) +
+            L[y1 * P + x0] * (1 - tx) * ty +
+            L[y1 * P + x1] * tx * ty);
+      }
+      // contrasty gray multiplier centred near 0.8 so it textures the ground
+      // without dragging its overall tone down too far
+      const m = THREE.MathUtils.clamp(0.8 + (v - 0.5) * 0.7, 0.3, 1.0);
+      const g = Math.round(m * 255);
+      const idx = (y * size + x) * 4;
+      img.data[idx] = img.data[idx + 1] = img.data[idx + 2] = g;
+      img.data[idx + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(700 / 4, 700 / 4); // tile every ~4 world units
+  tex.colorSpace = THREE.NoColorSpace;
+  return tex;
+}
+
 /* spatial hash of spire feet so the ground can look up only nearby spires */
 function makeGrid(cell) {
   const map = new Map();
