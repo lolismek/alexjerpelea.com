@@ -77,28 +77,46 @@ main {
 }
 
 .tagline {
+  position: relative;
+  z-index: 0;
   margin-top: 1.8rem;
   font-size: clamp(0.78rem, 2.2vw, 1.05rem);
   letter-spacing: 0.1em;
   text-transform: lowercase;
   color: var(--ink);
-  /* thick black letter border (stroke painted behind the fill so the white
-     stays crisp), plus a soft glow — legible over any frame of the dither */
-  -webkit-text-stroke: 2px #000;
-  paint-order: stroke fill;
-  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 0 14px rgba(0, 0, 0, 0.55);
+  /* letters stay light like the title; the ::before scrim supplies contrast */
+  text-shadow:
+    1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
 }
 
 .heromail {
+  position: relative;
+  z-index: 0;
   margin-top: 0.85rem;
   font-family: var(--mono);
   font-size: clamp(0.7rem, 1.8vw, 0.85rem);
   letter-spacing: 0.08em;
   color: var(--ink);
-  opacity: 1;
-  -webkit-text-stroke: 1.6px #000;
-  paint-order: stroke fill;
-  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 0 14px rgba(0, 0, 0, 0.55);
+  text-shadow:
+    1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+/* Soft, edgeless dark scrim behind the hero subtext: darkens whatever the
+   moving landscape is doing right behind the text so the light letters stay
+   readable on pale frames — feathered by blur, so it's not a box. */
+.tagline::before,
+.heromail::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% + 2em);
+  height: calc(100% + 1.3em);
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.55);
+  filter: blur(16px);
+  border-radius: 999px;
+  z-index: -1;
 }
 
 .scrollcue {
