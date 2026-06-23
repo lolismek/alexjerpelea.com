@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Alex Jerpelea</title>
+    <meta name="description" content="Alex Jerpelea — competitive programming, ML/NLP research, and building things." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- TEMP DEBUG: surfaces JS / WebGL errors on screen -->
+    <pre id="errlog" style="display:none;position:fixed;z-index:99;inset:0 0 auto 0;max-height:60vh;overflow:auto;white-space:pre-wrap;background:#a00;color:#fff;font:12px monospace;padding:8px;margin:0"></pre>
+    <script>
+      window.__errs = [];
+      function logErr(s) {
+        window.__errs.push(String(s));
+        var p = document.getElementById("errlog");
+        if (p) { p.textContent = window.__errs.join("\n\n"); p.style.display = "block"; }
+      }
+      window.addEventListener("error", function (e) {
+        logErr("ERROR: " + (e.message || e.error) + (e.filename ? " @" + e.filename + ":" + e.lineno : ""));
+      });
+      window.addEventListener("unhandledrejection", function (e) {
+        logErr("REJECTION: " + ((e.reason && e.reason.stack) || e.reason));
+      });
+      var _ce = console.error;
+      console.error = function () { logErr("console.error: " + Array.from(arguments).join(" ")); _ce.apply(console, arguments); };
+    </script>
+
+    <!-- The landscape lives here and never moves. -->
+    <canvas id="bg" aria-hidden="true"></canvas>
+
+    <main>
+      <!-- ============ HERO ============ -->
+      <section class="hero">
+        <h1 class="name">ALEX<br />JERPELEA</h1>
+        <p class="tagline">competitive programming · ml / nlp research · building things</p>
+        <div class="scrollcue" aria-hidden="true">scroll ↓</div>
+      </section>
+
+      <!-- ============ ABOUT ============ -->
+      <section class="block" data-reveal>
+        <h2 class="kicker">// about</h2>
+        <p class="prose">
+          <!-- EDIT ME -->
+          I&rsquo;m Alex. I write fast algorithms, train and probe language models, and
+          occasionally build strange little things on the web. This page is one of them.
+        </p>
+      </section>
+
+      <!-- ============ PROJECTS ============ -->
+      <section class="block" data-reveal>
+        <h2 class="kicker">// projects</h2>
+        <div class="cards">
+          <!-- EDIT ME: duplicate / replace these cards with real projects -->
+          <article class="card" data-reveal>
+            <h3>Project One</h3>
+            <p>One-line description of what it is and why it&rsquo;s interesting.</p>
+            <div class="meta">
+              <span class="tag">c++</span><span class="tag">algorithms</span>
+              <a href="#" class="go">open →</a>
+            </div>
+          </article>
+
+          <article class="card" data-reveal>
+            <h3>Project Two</h3>
+            <p>One-line description of what it is and why it&rsquo;s interesting.</p>
+            <div class="meta">
+              <span class="tag">python</span><span class="tag">nlp</span>
+              <a href="#" class="go">open →</a>
+            </div>
+          </article>
+
+          <article class="card" data-reveal>
+            <h3>Project Three</h3>
+            <p>One-line description of what it is and why it&rsquo;s interesting.</p>
+            <div class="meta">
+              <span class="tag">research</span>
+              <a href="#" class="go">open →</a>
+            </div>
+          </article>
+
+          <article class="card" data-reveal>
+            <h3>Project Four</h3>
+            <p>One-line description of what it is and why it&rsquo;s interesting.</p>
+            <div class="meta">
+              <span class="tag">web</span><span class="tag">three.js</span>
+              <a href="#" class="go">open →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ CONTACT ============ -->
+      <section class="block" data-reveal>
+        <h2 class="kicker">// contact</h2>
+        <ul class="links">
+          <!-- EDIT ME -->
+          <li><a href="mailto:alex.jerpelea@gmail.com">email</a></li>
+          <li><a href="https://github.com/lolismek">github</a></li>
+          <li><a href="#">linkedin</a></li>
+        </ul>
+        <p class="colophon">made with three.js + a bayer dither shader · no images, all real-time</p>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
