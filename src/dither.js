@@ -31,6 +31,7 @@ export class DitherPass {
         uContrast: { value: 1.08 },
         uBrightness: { value: 0.0 },
         uLevels: { value: 5 }, // number of gray output bands (2 = pure B&W)
+        uBlack: { value: 0.08 }, // darkest band isn't pure #000, just very dark
         uDither: { value: 1.15 / glyphs.count }, // ~one glyph step of jitter
       },
       depthTest: false,
@@ -53,6 +54,7 @@ export class DitherPass {
         uniform float uContrast;
         uniform float uBrightness;
         uniform float uLevels;
+        uniform float uBlack;
         uniform float uDither;
         varying vec2 vUv;
 
@@ -97,7 +99,8 @@ export class DitherPass {
 
           // inked pixels drop to the next-darker band; bare pixels stay lighter
           float level = clamp(lo + step(0.5, ink), 0.0, uLevels - 1.0);
-          float v = 1.0 - level / (uLevels - 1.0); // gray value in [0,1]
+          float shade = 1.0 - level / (uLevels - 1.0); // 1 light .. 0 darkest band
+          float v = mix(uBlack, 1.0, shade); // lift the darkest band off pure black
           gl_FragColor = vec4(vec3(v), 1.0);
         }
       `,

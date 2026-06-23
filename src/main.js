@@ -102,6 +102,7 @@ animate();
 // touch-scrolling all keep working.
 let dragging = false;
 let engaged = false;
+let pointerType = "mouse";
 let downX = 0;
 let downY = 0;
 let lastX = 0;
@@ -117,6 +118,7 @@ function onPointerDown(e) {
   if (isInteractive(e.target)) return;
   dragging = true;
   engaged = false;
+  pointerType = e.pointerType || "mouse";
   downX = lastX = e.clientX;
   downY = lastY = e.clientY;
 }
@@ -132,8 +134,10 @@ function onPointerMove(e) {
     const totX = Math.abs(e.clientX - downX);
     const totY = Math.abs(e.clientY - downY);
     if (totX < DRAG_THRESHOLD && totY < DRAG_THRESHOLD) return;
-    // mostly-vertical gesture: let the page scroll (touch) / select normally
-    if (totY > totX * 1.3) {
+    // On touch, let a mostly-vertical swipe scroll the page instead of
+    // rotating. A mouse has no drag-to-scroll, so any drag should rotate —
+    // this is what makes a straight up/down mouse drag work.
+    if (pointerType === "touch" && totY > totX * 1.3) {
       dragging = false;
       return;
     }
