@@ -175,3 +175,32 @@ const observer = new IntersectionObserver(
   { threshold: 0.15 }
 );
 document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+
+// ---- section nav (scroll-spy) ----------------------------------------------
+// One long page; the sticky nav just jumps to sections (plain anchors + CSS
+// smooth scroll). This highlights whichever section is currently in view.
+const navlinks = Array.from(document.querySelectorAll(".navlink"));
+const linkFor = new Map(
+  navlinks.map((a) => [a.getAttribute("href").slice(1), a])
+);
+const sections = Array.from(linkFor.keys())
+  .map((id) => document.getElementById(id))
+  .filter(Boolean);
+
+function setActiveLink(id) {
+  navlinks.forEach((a) =>
+    a.classList.toggle("is-active", a === linkFor.get(id))
+  );
+}
+
+const spy = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) {
+      // a thin band across the upper-middle of the viewport decides the
+      // "current" section as you scroll
+      if (e.isIntersecting) setActiveLink(e.target.id);
+    }
+  },
+  { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+);
+sections.forEach((s) => spy.observe(s));

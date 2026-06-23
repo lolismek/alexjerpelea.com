@@ -68,22 +68,23 @@ main {
   line-height: 0.92;
   letter-spacing: 0.04em;
   color: #fff;
-  /* legible over a busy 1-bit background: hard pixel shadow + halo */
+  /* legible over a shifting gray background: solid 3px pixel border + halo */
   text-shadow:
-    4px 4px 0 #000,
-    -2px -2px 0 #000,
-    2px -2px 0 #000,
-    -2px 2px 0 #000,
-    0 0 18px rgba(0, 0, 0, 0.65);
+    3px 0 0 #000, -3px 0 0 #000, 0 3px 0 #000, 0 -3px 0 #000,
+    3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000,
+    0 0 24px rgba(0, 0, 0, 0.9);
 }
 
 .tagline {
-  margin-top: 1.6rem;
-  font-size: clamp(0.72rem, 2vw, 1rem);
-  letter-spacing: 0.12em;
+  margin-top: 1.8rem;
+  font-size: clamp(0.78rem, 2.2vw, 1.05rem);
+  letter-spacing: 0.1em;
   text-transform: lowercase;
   color: var(--ink);
-  text-shadow: 1px 1px 0 #000, 0 0 10px rgba(0, 0, 0, 0.8);
+  /* readable on the bare landscape without a box: crisp outline + halo */
+  text-shadow:
+    1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    0 0 16px rgba(0, 0, 0, 0.95);
 }
 
 .scrollcue {
@@ -92,7 +93,7 @@ main {
   font-size: 0.7rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  text-shadow: 1px 1px 0 #000;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 12px rgba(0, 0, 0, 0.9);
   animation: blink 1.6s steps(2, end) infinite;
 }
 
@@ -103,31 +104,156 @@ main {
   100% { opacity: 0.15; }
 }
 
-/* ============ CONTENT BLOCKS ============ */
-.block {
-  max-width: 960px;
+/* ============ STICKY SECTION NAV ============ */
+/* In flow after the full-height hero, so it's hidden until you scroll into
+   the content, then sticks to the top. Clicking a link jumps to a section —
+   the page stays one long scroll. */
+.sectionnav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  pointer-events: none; /* let drags pass to the canvas around the pill */
+}
+
+.navinner {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  pointer-events: auto;
+  max-width: 100%;
+  background: rgba(6, 6, 8, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  scrollbar-width: none;
+}
+.navinner::-webkit-scrollbar { display: none; }
+
+.navlink {
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.6rem 0.95rem;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.navlink + .navlink { border-left: 1px solid rgba(255, 255, 255, 0.22); }
+.navlink:hover { background: rgba(255, 255, 255, 0.1); }
+.navlink.is-active { background: #fff; color: var(--void); }
+
+/* ============ SECTIONS ============ */
+.section {
+  max-width: 820px;
   margin: 0 auto;
-  padding: 22vh 1.4rem;
+  padding: 7vh 1.2rem;
+  scroll-margin-top: 4.5rem; /* clear the sticky nav when jumped to */
+}
+
+/* each section sits on its own dark plate, so text stays legible over the
+   shifting gray landscape behind it */
+.panel {
+  background: rgba(6, 6, 8, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
+  padding: 1.8rem 1.6rem 2rem;
 }
 
 .kicker {
   font-family: var(--mono);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.3rem;
   color: #fff;
-  text-shadow: 2px 2px 0 #000;
+  opacity: 0.85;
 }
 
 .prose {
-  max-width: 46ch;
-  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  max-width: 52ch;
+  font-size: clamp(0.95rem, 2.2vw, 1.12rem);
   line-height: 1.7;
-  background: rgba(5, 5, 5, 0.72);
-  border-left: 2px solid #fff;
-  padding: 1.1rem 1.3rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.7);
+  padding: 0.2rem 0 0.2rem 1.1rem;
+}
+
+/* ============ ENTRY LISTS (experiences / awards / writing) ============ */
+.entries {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.entry {
+  border-left: 2px solid rgba(255, 255, 255, 0.45);
+  padding: 0.1rem 0 0.1rem 1.1rem;
+}
+
+.entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+}
+
+.entry-title {
+  font-family: var(--pixel);
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.entry-when {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.entry-sub {
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  opacity: 0.78;
+  margin-top: 0.3rem;
+}
+
+.entry-desc {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  opacity: 0.92;
+  margin-top: 0.45rem;
+}
+
+/* awards read as a year gutter + the honor */
+.entry.award {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+.entry.award .entry-when {
+  flex: 0 0 3.2rem;
+}
+
+/* writing rows: whole title line is the link */
+.entry-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+.entry-link:hover .entry-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* ============ PROJECT CARDS ============ */
@@ -189,13 +315,19 @@ main {
   border-bottom: 1px solid currentColor;
 }
 
-/* ============ CONTACT ============ */
+/* ============ CONTACT (footer) ============ */
+.footer {
+  margin-top: 2.2rem;
+  text-align: center;
+}
+
 .links {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  font-size: 1.1rem;
+  justify-content: center;
+  gap: 1.4rem;
+  font-size: 1.05rem;
 }
 
 .links a {
@@ -203,7 +335,7 @@ main {
   text-decoration: none;
   border-bottom: 2px solid #fff;
   padding-bottom: 2px;
-  text-shadow: 1px 1px 0 #000;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 10px rgba(0, 0, 0, 0.9);
 }
 
 .links a:hover {
@@ -213,11 +345,11 @@ main {
 }
 
 .colophon {
-  margin-top: 2.5rem;
+  margin-top: 1.6rem;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
-  opacity: 0.7;
-  text-shadow: 1px 1px 0 #000;
+  opacity: 0.8;
+  text-shadow: 1px 1px 0 #000, 0 0 10px rgba(0, 0, 0, 0.9);
 }
 
 /* ============ SCROLL REVEAL ============ */
