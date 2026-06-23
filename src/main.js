@@ -180,7 +180,10 @@ const observer = new IntersectionObserver(
       }
     }
   },
-  { threshold: 0.15 }
+  // threshold 0 (fire as soon as any part enters) is essential: a percentage
+  // threshold can never be met by an element taller than ~1/threshold screens,
+  // which on mobile left the very tall portfolio panel stuck hidden.
+  { threshold: 0, rootMargin: "0px 0px -10% 0px" }
 );
 document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
 
