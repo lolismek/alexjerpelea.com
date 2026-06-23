@@ -18,12 +18,12 @@ export function createLandscape() {
   const HORIZON = 0.82; // lightest sky value, also the fog color
   const ZENITH = 0.62; // sky darkens a touch overhead
   const SPIKE_COUNT = 740;
-  const FIELD_INNER = 24; // bare clearing the camera sits inside
+  const FIELD_INNER = 16; // bare clearing the camera sits inside
   const FIELD_OUTER = 120;
-  const ORBIT_RADIUS = 9; // camera orbits *inside* the clearing, looking out
+  const ORBIT_RADIUS = 10; // camera orbits inside the clearing, looking outward
   const ORBIT_SPEED = 0.045; // rad/s — a full turn ~140s
-  const CAM_HEIGHT = 5.0;
-  const LOOK_AT = new THREE.Vector3(0, 8, 0); // slight upward look across the field
+  const CAM_HEIGHT = 4.0;
+  const LOOK_AT = new THREE.Vector3(0, 8, 0); // y = look height; x/z come from the outward gaze each frame
   const CLUSTERS = 40;
   // -------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ export function createLandscape() {
 
   const scene = new THREE.Scene();
   scene.background = fogColor;
-  scene.fog = new THREE.Fog(fogColor, 30, 260); // far spires fade into sky
+  scene.fog = new THREE.Fog(fogColor, 45, 320); // pushed back so the mid-field ground keeps its texture
 
   const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 600);
 
@@ -89,12 +89,12 @@ export function createLandscape() {
       velocity *= 0.94; // ease the flick out
     }
     const a = t * ORBIT_SPEED + userAngle;
-    camera.position.set(
-      Math.cos(a) * ORBIT_RADIUS,
-      CAM_HEIGHT,
-      Math.sin(a) * ORBIT_RADIUS
-    );
-    lookTarget.set(LOOK_AT.x, LOOK_AT.y + pitch, LOOK_AT.z);
+    const cx = Math.cos(a);
+    const cz = Math.sin(a);
+    camera.position.set(cx * ORBIT_RADIUS, CAM_HEIGHT, cz * ORBIT_RADIUS);
+    // look OUTWARD into the field (not back across the empty clearing), so the
+    // spires stand right ahead instead of a long way off on the far rim.
+    lookTarget.set(cx * (ORBIT_RADIUS + 40), LOOK_AT.y + pitch, cz * (ORBIT_RADIUS + 40));
     camera.lookAt(lookTarget);
     if (skyMat) skyMat.uniforms.uTime.value = t;
   }
@@ -215,6 +215,8 @@ function placeSpikes(count, inner, outer, clusterCount, rnd) {
       h = 6 + Math.pow(rnd(), 1.8) * 30; // 6..36
       ratio = 0.05 + rnd() * 0.03;
     }
+    // keep the camera's clearing clear: nothing spawns inside FIELD_INNER
+    if (x * x + z * z < inner * inner) continue;
     const radius = h * ratio;
     const footR = radius * 1.7; // mound footprint radius
 
@@ -380,10 +382,19 @@ function buildGround({ grid }) {
     const crack = Math.pow(1.0 - ridge, 10.0); // ~1 along thin ridge lines
     const ridge2 = Math.abs(valNoise(x * 0.31 + 9.0, y * 0.31 - 4.0) * 2.0 - 1.0);
     const crack2 = Math.pow(1.0 - ridge2, 14.0);
+    const carve = Math.pow(1.0 - pr, 8.0); // same noise as the carved crackRelief
 
-    let g = 0.42 + (fbm(x * 0.5, y * 0.5) - 0.5) * 0.16; // mid-gray base -> reads lighter than the dark spires
-    g *= 1.0 - 0.6 * crack - 0.5 * crack2; // darken the fissures
-    g = Math.max(0.03, g);
+    // The ground is flat-lit (uniform sun on an up-facing plane), so only the
+    // albedo carries tone. Keep it a true MID-gray with a wide tonal spread so
+    // it straddles several quantizer bands instead of sitting bright in one and
+    // flattening to a single gray. Relief tints it (crests light, hollows/
+    // mounds/roots dark), broad mottling + grain break it up, cracks cut dark.
+    const mottle = (fbm(x * 0.22 + 17.0, y * 0.22 - 5.0) - 0.5) * 0.18;
+    const reliefTint = (rough + fine * 1.5 + bump * 0.4) * 0.1;
+    let g = 0.34 + reliefTint + mottle + (fbm(x * 0.5, y * 0.5) - 0.5) * 0.2;
+    g *= 1.0 - 0.85 * carve; // carved fractures read as dark lines
+    g *= 1.0 - 0.6 * crack - 0.5 * crack2; // extra fine fissures
+    g = THREE.MathUtils.clamp(g, 0.04, 0.85);
     colors[i * 3] = colors[i * 3 + 1] = colors[i * 3 + 2] = g;
   }
   geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
