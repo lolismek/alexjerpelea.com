@@ -309,17 +309,22 @@ main {
   box-shadow: 6px 6px 0 #000;
 }
 
-/* scraped thumbnails sit grayscale in the monochrome world, color on hover */
+/* project thumbnails, full color */
 .card-img {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border-bottom: 1px solid #fff;
-  filter: grayscale(1) contrast(1.05) brightness(0.95);
-  transition: filter 0.25s ease;
 }
-.card:hover .card-img { filter: none; }
+
+/* tiny, transparent credit for third-party images (e.g. diagrams) */
+.card .imgcredit {
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+  margin-top: 0.5rem;
+}
 
 .card-body {
   display: flex;
