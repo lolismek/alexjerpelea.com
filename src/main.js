@@ -3,6 +3,14 @@ import { createLandscape } from "./landscape.js";
 import { DitherPass } from "./dither.js";
 import "./style.css";
 
+// Always open on the hero. Browsers (and Vite HMR) restore the previous scroll
+// position on reload, and a nav click used to leave a #section in the URL that
+// the browser would then jump to — both made the page look like it "defaulted"
+// to a section instead of the landing. Strip any stale hash and start at top.
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+window.scrollTo(0, 0);
+
 // Keep material colors as raw linear values so the dither thresholds are
 // predictable instead of being reshaped by sRGB color management.
 THREE.ColorManagement.enabled = false;
@@ -204,3 +212,25 @@ const spy = new IntersectionObserver(
   { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
 );
 sections.forEach((s) => spy.observe(s));
+
+// Smooth-scroll to a section on click WITHOUT writing a #hash to the URL, so a
+// later reload still opens on the hero instead of jumping to the last section.
+navlinks.forEach((a) => {
+  a.addEventListener("click", (e) => {
+    const id = a.getAttribute("href").slice(1);
+    const el = document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    setActiveLink(id); // immediate feedback; the spy keeps it in sync after
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+// Show the nav bar whenever the page is scrolled down; hide it again whenever
+// the user is back at the very top (over the hero).
+const nav = document.querySelector(".sectionnav");
+if (nav) {
+  const syncNav = () => nav.classList.toggle("revealed", window.scrollY > 8);
+  window.addEventListener("scroll", syncNav, { passive: true });
+  syncNav(); // set initial state for the current scroll position
+}

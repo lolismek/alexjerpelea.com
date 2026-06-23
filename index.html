@@ -44,61 +44,241 @@
         <div class="scrollcue" aria-hidden="true">scroll ↓</div>
       </section>
 
-      <!-- ============ SECTION NAV (sticky, jumps to sections) ============ -->
+      <!-- ============ SECTION NAV (top bar, jumps to sections) ============ -->
       <nav class="sectionnav" aria-label="sections">
         <div class="navinner">
-          <a class="navlink is-active" href="#currently">currently</a>
-          <a class="navlink" href="#research">research</a>
+          <a class="navlink is-active" href="#about">about</a>
+          <a class="navlink" href="#portfolio">portfolio</a>
           <a class="navlink" href="#experiences">experiences</a>
           <a class="navlink" href="#awards">awards</a>
-          <a class="navlink" href="#writing">writing</a>
+          <a class="navlink" href="#links">links</a>
         </div>
       </nav>
 
-      <!-- ---------- CURRENTLY ---------- -->
-      <section class="section" id="currently">
+      <!-- ---------- ABOUT ---------- -->
+      <section class="section" id="about">
         <div class="panel" data-reveal>
-          <h2 class="kicker">// currently</h2>
+          <h2 class="kicker">// about</h2>
           <p class="prose">
-            <!-- EDIT ME -->
-            A brief description of what I&rsquo;m currently doing &mdash; the research I&rsquo;m
-            poking at, what I&rsquo;m building, and what I&rsquo;m thinking about this semester.
+            I&rsquo;m Alex Jerpelea, a rising sophomore at Columbia University studying CS &amp; math.
+            I have a ton of interests &mdash; from AI (deep learning, mechanistic interpretability,
+            multi-agent systems, latent communication, machine translation) to efficient algorithms,
+            systems design, UNIX, decentralized networks, and fun consumer apps. I grew up in
+            Bucharest, Romania, where I spent most of high school doing competitive programming
+            (see awards below), then got really into NLP, then ML as a whole, then startups, and so on.
+            I&rsquo;m just having fun learning as much as I can about all sorts of stuff.
           </p>
+
+          <div class="subsection">
+            <h3 class="subhead">currently</h3>
+            <p class="prose">
+              I&rsquo;m doing research at Columbia&rsquo;s DAPLab, studying errors in multi-agent
+              systems and efficient latent communication and memory storage to strengthen agents&rsquo;
+              &ldquo;Theory of Mind&rdquo;. I&rsquo;m also studying the manifolds formed by concepts
+              within Transformers, and self-experimenting with various hypotheses for how Transformers
+              could be more efficient and deeper learners.
+            </p>
+          </div>
         </div>
       </section>
 
-      <!-- ---------- RESEARCH ---------- -->
-      <section class="section" id="research">
+      <!-- ---------- PORTFOLIO ---------- -->
+      <section class="section" id="portfolio">
         <div class="panel" data-reveal>
-          <h2 class="kicker">// research</h2>
-          <div class="cards">
-            <!-- EDIT ME: duplicate / replace these cards with real projects -->
-            <article class="card">
-              <h3>Research Project One</h3>
-              <p>One-line description of the question, method, and what you found.</p>
-              <div class="meta">
-                <span class="tag">nlp</span><span class="tag">llms</span>
-                <a href="#" class="go">read →</a>
-              </div>
-            </article>
+          <h2 class="kicker">// portfolio</h2>
 
-            <article class="card">
-              <h3>Research Project Two</h3>
-              <p>One-line description of the question, method, and what you found.</p>
-              <div class="meta">
-                <span class="tag">vision</span>
-                <a href="#" class="go">read →</a>
-              </div>
-            </article>
+          <div class="subsection">
+            <h3 class="subhead">research projects</h3>
+            <div class="cards">
+              <article class="card">
+                <div class="card-body">
+                  <h3>AroTranslate</h3>
+                  <p>First neural machine-translation system for Aromanian, an endangered Romance language. Largest Aromanian&ndash;Romanian dataset; deployed to 5,000+ users; primary author of the COLING 2025 paper.</p>
+                  <div class="meta">
+                    <span class="tag">nlp</span><span class="tag">translation</span><span class="tag">paper</span>
+                    <a href="https://arotranslate.com" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
 
-            <article class="card">
-              <h3>Research Project Three</h3>
-              <p>One-line description of the question, method, and what you found.</p>
-              <div class="meta">
-                <span class="tag">theory</span>
-                <a href="#" class="go">read →</a>
-              </div>
-            </article>
+              <article class="card">
+                <img class="card-img" src="/img/mas-research.png" alt="MAS-research" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <h3>MAS-research</h3>
+                  <p>Evaluation framework benchmarking multi-agent systems (Magentic-One, ChatDev, AutoGen) behind a shared model proxy &mdash; probing where inter-agent coordination actually breaks.</p>
+                  <div class="meta">
+                    <span class="tag">multi-agent</span><span class="tag">llms</span><span class="tag">ongoing</span>
+                    <a href="https://github.com/lolismek/MAS-research" class="go" target="_blank" rel="noopener">read →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card-body">
+                  <h3>RoMemes</h3>
+                  <p>A multimodal meme corpus for Romanian &mdash; the first digital corpus of Romanian-language memes, with political-sentiment detection.</p>
+                  <div class="meta">
+                    <span class="tag">nlp</span><span class="tag">multimodal</span><span class="tag">paper</span>
+                    <a href="https://arxiv.org/abs/2410.15497" class="go" target="_blank" rel="noopener">read →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card-body">
+                  <h3>Reddit Is All You Need</h3>
+                  <p>Authorship profiling for Romanian, learned from Reddit.</p>
+                  <div class="meta">
+                    <span class="tag">nlp</span><span class="tag">paper</span>
+                    <a href="https://arxiv.org/abs/2410.09907" class="go" target="_blank" rel="noopener">read →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card-body">
+                  <h3>Multi-Agent Theory of Mind</h3>
+                  <p>Ongoing at Columbia&rsquo;s DAPLab: failure modes in multi-agent systems and efficient latent communication + memory to strengthen agents&rsquo; Theory of Mind &mdash; plus the geometry of concept manifolds in Transformers.</p>
+                  <div class="meta">
+                    <span class="tag">interpretability</span><span class="tag">multi-agent</span><span class="tag">ongoing</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="subsection">
+            <h3 class="subhead">hackathon projects</h3>
+            <div class="cards">
+              <article class="card">
+                <img class="card-img" src="/img/neuro-trading.png" alt="neuro-trading" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <p class="prize">Best Use of Hermes · Nous Research</p>
+                  <h3>neuro-trading</h3>
+                  <p>fMRI-enhanced swarm simulations for prediction markets.</p>
+                  <div class="meta">
+                    <span class="tag">yhack 2026</span><span class="tag">pytorch</span><span class="tag">multi-agent</span>
+                    <a href="https://devpost.com/software/neuro-trader" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <img class="card-img" src="/img/syscall.png" alt="Syscall" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <p class="prize">Best Use of Nemotron · NVIDIA</p>
+                  <h3>Syscall</h3>
+                  <p>Agents coordinating agents to solve software &amp; kernel engineering.</p>
+                  <div class="meta">
+                    <span class="tag">sw26 buildathon</span><span class="tag">claude agent sdk</span><span class="tag">cuda</span>
+                    <a href="https://devpost.com/software/syscall" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <img class="card-img" src="/img/scaled.png" alt="scaled" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <p class="prize">Best Use of Solana · MLH</p>
+                  <h3>scaled</h3>
+                  <p>Crowdsourced diffusion data for world models, on Solana.</p>
+                  <div class="meta">
+                    <span class="tag">hack@brown 2026</span><span class="tag">diffusion</span><span class="tag">solana</span>
+                    <a href="https://devpost.com/software/scale-diffusion" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <img class="card-img" src="/img/open-disaster.jpg" alt="Open Disaster" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <p class="prize">Best Social Impact · Best Use of Featherless</p>
+                  <h3>Open Disaster</h3>
+                  <p>AI agents in real-time disaster scenarios.</p>
+                  <div class="meta">
+                    <span class="tag">devfest 2026</span><span class="tag">three.js</span><span class="tag">agents</span>
+                    <a href="https://devpost.com/software/open-disaster" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <img class="card-img" src="/img/dopamaxx.jpg" alt="DopaMAXX" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <p class="prize">Top 3 · NY Tech Week</p>
+                  <h3>DopaMAXX</h3>
+                  <p>A Chrome extension that optimizes your feed for dopamine using EEG signals.</p>
+                  <div class="meta">
+                    <span class="tag">chrome extension</span><span class="tag">eeg / bci</span>
+                    <a href="https://www.linkedin.com/posts/alexandru-iulius-jerpelea-5828b2181_top-3-at-the-new-york-tech-week-hackathon-activity-7470224773344808960-Y0nh" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <img class="card-img" src="/img/floc.png" alt="Floc" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <h3>Floc</h3>
+                  <p>Cursor, but for writing &mdash; co-write with an AI agent backed by a style database of your own work.</p>
+                  <div class="meta">
+                    <span class="tag">hackprinceton 2025</span><span class="tag">next.js</span><span class="tag">mcp</span>
+                    <a href="https://devpost.com/software/floc-nwa8my" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card-body">
+                  <h3>LectureFlow</h3>
+                  <p>Teaching on Zoom for the AI era.</p>
+                  <div class="meta">
+                    <span class="tag">treehacks 2026</span><span class="tag">electron</span><span class="tag">whisper</span>
+                    <a href="https://devpost.com/software/lectureflow" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="subsection">
+            <h3 class="subhead">other projects</h3>
+            <div class="cards">
+              <article class="card">
+                <img class="card-img" src="/img/open-deadlocks.png" alt="open-deadlocks" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <h3>open-deadlocks</h3>
+                  <p>A benchmark pipeline that injects realistic Java deadlocks and tests whether AI agents can detect and fix them.</p>
+                  <div class="meta">
+                    <span class="tag">python</span><span class="tag">java</span><span class="tag">agents</span>
+                    <a href="https://github.com/lolismek/open-deadlocks" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <img class="card-img" src="/img/slopache.png" alt="slopache" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <h3>slopache</h3>
+                  <p>A full open-source, end-to-end pipeline that turns one script into a finished character-grounded vertical reel (ComfyUI · FLUX · Wan · ElevenLabs).</p>
+                  <div class="meta">
+                    <span class="tag">comfyui</span><span class="tag">diffusion</span><span class="tag">ffmpeg</span>
+                    <a href="https://github.com/lolismek/slopache" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <img class="card-img" src="/img/hive.png" alt="hive" loading="lazy" decoding="async" />
+                <div class="card-body">
+                  <h3>hive</h3>
+                  <p>Contributions to Hive &mdash; an open-source platform where AI agents collaboratively improve shared artifacts via isolated forks and leaderboards (rllm-project).</p>
+                  <div class="meta">
+                    <span class="tag">open source</span><span class="tag">python</span><span class="tag">next.js</span>
+                    <a href="https://github.com/lolismek/hive" class="go" target="_blank" rel="noopener">open →</a>
+                  </div>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -108,22 +288,45 @@
         <div class="panel" data-reveal>
           <h2 class="kicker">// experiences</h2>
           <ul class="entries">
-            <!-- EDIT ME -->
             <li class="entry">
               <div class="entry-head">
-                <h3 class="entry-title">Role / Title</h3>
-                <span class="entry-when">2025 &mdash; present</span>
+                <h3 class="entry-title">Researcher · Columbia NLP Group</h3>
+                <span class="entry-when">Jan 2026 &mdash; present</span>
               </div>
-              <p class="entry-sub">Organization · location</p>
-              <p class="entry-desc">One line on what you worked on and the impact.</p>
+              <p class="entry-sub">Columbia University · New York, NY</p>
+              <p class="entry-desc">Extending affective-state-identification models with continual learning for low-resource languages, under Prof. Kathleen McKeown.</p>
             </li>
             <li class="entry">
               <div class="entry-head">
-                <h3 class="entry-title">Role / Title</h3>
-                <span class="entry-when">summer 2025</span>
+                <h3 class="entry-title">Researcher · AroTranslate</h3>
+                <span class="entry-when">Dec 2023 &mdash; Jan 2025</span>
               </div>
-              <p class="entry-sub">Organization · location</p>
-              <p class="entry-desc">One line on what you worked on and the impact.</p>
+              <p class="entry-sub">Human Language Technology Center, University of Bucharest · Romania</p>
+              <p class="entry-desc">Built the first neural MT system for Aromanian; ran the largest Aromanian&ndash;Romanian data collection; 5,000+ users. Primary author of the COLING 2025 paper; represented Aromanian preservation at UNESCO&rsquo;s &ldquo;Language Technology for All&rdquo; (Paris).</p>
+            </li>
+            <li class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">ML / NLP Intern · Veridion</h3>
+                <span class="entry-when">Jun 2024 &mdash; Aug 2024</span>
+              </div>
+              <p class="entry-sub">Veridion · Bucharest, Romania</p>
+              <p class="entry-desc">Built language models extracting insights on 100M+ firms from public web data (employee count, revenue, business tags) for a global business database serving clients like McKinsey &amp; Exiger.</p>
+            </li>
+            <li class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">ML / NLP Researcher · Romanian National Academy</h3>
+                <span class="entry-when">May 2024 &mdash; Oct 2024</span>
+              </div>
+              <p class="entry-sub">AI Institute, Romanian National Academy · Bucharest</p>
+              <p class="entry-desc">Built the first Romanian meme corpus and political-sentiment models; co-authored RoMemes (Best Paper, ConsILR 2024).</p>
+            </li>
+            <li class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">ML Researcher (Human Motion) · SpeeD Lab</h3>
+                <span class="entry-when">May 2023 &mdash; Jan 2024</span>
+              </div>
+              <p class="entry-sub">SpeeD Lab, Polytechnic University of Bucharest · Romania</p>
+              <p class="entry-desc">Classified exercises from sensor data, built custom motion-tracking bracelets, and ran a 23-participant data-collection campaign.</p>
             </li>
           </ul>
         </div>
@@ -134,58 +337,75 @@
         <div class="panel" data-reveal>
           <h2 class="kicker">// awards</h2>
           <ul class="entries">
-            <!-- EDIT ME -->
+            <li class="entry award">
+              <span class="entry-when">2022&ndash;25</span>
+              <div>
+                <h3 class="entry-title">National Olympiad in Informatics &mdash; Romania</h3>
+                <p class="entry-sub">Gold &amp; 7th nationally (2025) · Silver (2024) · Bronze (2023, 2022) · Extended National Team, IOI (2025)</p>
+              </div>
+            </li>
             <li class="entry award">
               <span class="entry-when">2025</span>
               <div>
-                <h3 class="entry-title">Award / Honor</h3>
-                <p class="entry-sub">Competition or institution · placement</p>
+                <h3 class="entry-title">I.I. Rabi Scholar &mdash; Columbia University</h3>
+                <p class="entry-sub">Merit scholar cohort · GPA 4.17 / 4.0</p>
               </div>
             </li>
             <li class="entry award">
               <span class="entry-when">2024</span>
               <div>
-                <h3 class="entry-title">Award / Honor</h3>
-                <p class="entry-sub">Competition or institution · placement</p>
+                <h3 class="entry-title">Best Paper Award &mdash; ConsILR 2024</h3>
+                <p class="entry-sub">&ldquo;RoMemes: A Multimodal Meme Corpus for Romanian&rdquo;</p>
+              </div>
+            </li>
+            <li class="entry award">
+              <span class="entry-when">2024</span>
+              <div>
+                <h3 class="entry-title">National Olympiad in AI &mdash; Romania</h3>
+                <p class="entry-sub">Extended National Team (international competition)</p>
+              </div>
+            </li>
+            <li class="entry award">
+              <span class="entry-when">2024</span>
+              <div>
+                <h3 class="entry-title">IATI Bulgaria</h3>
+                <p class="entry-sub">Bronze medal</p>
+              </div>
+            </li>
+            <li class="entry award">
+              <span class="entry-when">2023</span>
+              <div>
+                <h3 class="entry-title">Romanian Masters of Informatics</h3>
+                <p class="entry-sub">Bronze medal</p>
+              </div>
+            </li>
+            <li class="entry award">
+              <span class="entry-when">2024</span>
+              <div>
+                <h3 class="entry-title">National Olympiad in Mathematics &mdash; Romania</h3>
+                <p class="entry-sub">Qualified to the national phase</p>
               </div>
             </li>
           </ul>
         </div>
       </section>
 
-      <!-- ---------- WRITING ---------- -->
-      <section class="section" id="writing">
+      <!-- ---------- LINKS (contact + profiles) ---------- -->
+      <section class="section" id="links">
         <div class="panel" data-reveal>
-          <h2 class="kicker">// writing</h2>
-          <ul class="entries">
-            <!-- EDIT ME -->
-            <li class="entry">
-              <a class="entry-link" href="#">
-                <h3 class="entry-title">Post title</h3>
-                <span class="entry-when">2025</span>
-              </a>
-              <p class="entry-desc">A short blurb about what this piece is about.</p>
-            </li>
-            <li class="entry">
-              <a class="entry-link" href="#">
-                <h3 class="entry-title">Post title</h3>
-                <span class="entry-when">2024</span>
-              </a>
-              <p class="entry-desc">A short blurb about what this piece is about.</p>
-            </li>
+          <h2 class="kicker">// links</h2>
+          <ul class="links">
+            <li><a href="mailto:alex.jerpelea@gmail.com">email</a></li>
+            <li><a href="https://github.com/lolismek" target="_blank" rel="noopener">github</a></li>
+            <li><a href="https://www.linkedin.com/in/alexandru-iulius-jerpelea-5828b2181" target="_blank" rel="noopener">linkedin</a></li>
+            <li><a href="https://scholar.google.com/citations?user=JLSsia0AAAAJ" target="_blank" rel="noopener">scholar</a></li>
+            <li><a href="https://devpost.com/alol12" target="_blank" rel="noopener">devpost</a></li>
           </ul>
         </div>
       </section>
 
-      <!-- ============ CONTACT (footer) ============ -->
-      <footer class="footer" data-reveal>
-        <ul class="links">
-          <!-- EDIT ME -->
-          <li><a href="mailto:alex.jerpelea@gmail.com">email</a></li>
-          <li><a href="https://github.com/lolismek">github</a></li>
-          <li><a href="#">linkedin</a></li>
-        </ul>
-        <p class="colophon">made with three.js + a bayer dither shader · no images, all real-time</p>
+      <footer class="footer">
+        <p class="colophon">made with three.js + a bayer dither shader · the landscape is dithered live, every frame</p>
       </footer>
     </main>
 
