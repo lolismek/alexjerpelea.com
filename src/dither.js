@@ -30,6 +30,7 @@ export class DitherPass {
         uGlyphCount: { value: glyphs.count },
         uContrast: { value: 1.08 },
         uBrightness: { value: 0.0 },
+        uLevels: { value: 5 }, // number of gray output bands (2 = pure B&W)
         uDither: { value: 1.15 / glyphs.count }, // ~one glyph step of jitter
       },
       depthTest: false,
@@ -51,6 +52,7 @@ export class DitherPass {
         uniform float uGlyphCount;
         uniform float uContrast;
         uniform float uBrightness;
+        uniform float uLevels;
         uniform float uDither;
         varying vec2 vUv;
 
@@ -75,19 +77,27 @@ export class DitherPass {
 
           l = clamp((l - 0.5) * uContrast + 0.5 + uBrightness, 0.0, 1.0);
 
-          // jitter the darkness by an ordered amount so flat regions break up
+          // Quantize darkness into uLevels gray bands. Each cell sits between
+          // two adjacent grays; the glyph stipples the transition between them,
+          // so we get REAL grays (light sky / mid ground / dark spires read as
+          // distinct tones) while keeping the engraved-symbol texture.
+          float d = 1.0 - l;
+          float t = d * (uLevels - 1.0);
+          float lo = floor(t);
+          float frac = t - lo; // 0 at the lighter band .. 1 toward the darker
+
+          // ordered jitter so flat bands don't show a hard contour
           float b = texture2D(tBayer, (mod(cell, 8.0) + 0.5) / 8.0).r;
-          float dark = clamp(1.0 - l + (b - 0.5) * uDither, 0.0, 1.0);
+          float fr = clamp(frac + (b - 0.5) * uDither, 0.0, 1.0);
 
-          // pick a glyph from the ramp (0 = empty/light .. N-1 = dense/dark)
-          float gi = floor(dark * (uGlyphCount - 0.0001));
-          gi = clamp(gi, 0.0, uGlyphCount - 1.0);
-
-          // sample that glyph's sub-cell (atlas is a horizontal strip)
+          // pick a glyph by how far we are toward the darker band (0 = empty)
+          float gi = clamp(floor(fr * (uGlyphCount - 0.0001)), 0.0, uGlyphCount - 1.0);
           vec2 gUv = vec2((gi + inCell.x) / uGlyphCount, inCell.y);
           float ink = texture2D(tGlyph, gUv).r; // 1 where the glyph stroke is
 
-          float v = 1.0 - step(0.5, ink); // black on the stroke, white elsewhere
+          // inked pixels drop to the next-darker band; bare pixels stay lighter
+          float level = clamp(lo + step(0.5, ink), 0.0, uLevels - 1.0);
+          float v = 1.0 - level / (uLevels - 1.0); // gray value in [0,1]
           gl_FragColor = vec4(vec3(v), 1.0);
         }
       `,
@@ -151,15 +161,24 @@ function makeGlyphAtlas(tile) {
     items.push({ ch, ink });
   }
 
-  // sort by coverage, drop exact-coverage duplicates (keeps a clean ramp)
+  // Sort by coverage, then RESAMPLE to a ramp that is ~uniform in ink
+  // coverage. Font glyph sets are lopsided — lots of near-empty punctuation,
+  // few dense symbols — so naively keeping every distinct level packs most of
+  // the ramp into the lights. Indexing that linearly makes mid-tones land on
+  // near-empty glyphs, so everything reads too white. Picking the glyph whose
+  // measured coverage is closest to each evenly spaced target makes glyph index
+  // ~linear in density, so a 50%-dark cell actually gets ~50% ink.
   items.sort((a, b) => a.ink - b.ink);
+  const maxInk = items[items.length - 1].ink || 1;
+  const STEPS = 16;
   const ramp = [];
-  let last = -1;
-  for (const it of items) {
-    if (it.ink !== last) {
-      ramp.push(it.ch);
-      last = it.ink;
+  for (let k = 0; k < STEPS; k++) {
+    const target = (k / (STEPS - 1)) * maxInk;
+    let best = items[0];
+    for (const it of items) {
+      if (Math.abs(it.ink - target) < Math.abs(best.ink - target)) best = it;
     }
+    if (ramp[ramp.length - 1] !== best.ch) ramp.push(best.ch); // dedupe runs
   }
 
   // compose the atlas strip

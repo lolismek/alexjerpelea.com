@@ -15,8 +15,8 @@ import * as THREE from "three";
  */
 export function createLandscape() {
   // ---- tunables ------------------------------------------------------------
-  const HORIZON = 0.9; // lightest sky value, also the fog color
-  const ZENITH = 0.66; // sky darkens a touch overhead
+  const HORIZON = 0.82; // lightest sky value, also the fog color
+  const ZENITH = 0.62; // sky darkens a touch overhead
   const SPIKE_COUNT = 740;
   const FIELD_INNER = 24; // bare clearing the camera sits inside
   const FIELD_OUTER = 120;
@@ -40,7 +40,7 @@ export function createLandscape() {
   const key = new THREE.DirectionalLight(0xffffff, 1.5);
   key.position.set(-1.0, 0.62, 0.42);
   scene.add(key);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.16)); // lower fill -> darker, cleaner spire faces
 
   // deterministic RNG so the field is identical on every load
   const rnd = makeRng(1337);
@@ -308,7 +308,7 @@ function buildGround() {
     const ridge2 = Math.abs(valNoise(x * 0.31 + 9.0, y * 0.31 - 4.0) * 2.0 - 1.0);
     const crack2 = Math.pow(1.0 - ridge2, 14.0);
 
-    let g = 0.24 + (fbm(x * 0.5, y * 0.5) - 0.5) * 0.16; // dark rugged base + grain
+    let g = 0.42 + (fbm(x * 0.5, y * 0.5) - 0.5) * 0.16; // mid-gray base -> reads lighter than the dark spires
     g *= 1.0 - 0.6 * crack - 0.5 * crack2; // darken the fissures
     g = Math.max(0.03, g);
     colors[i * 3] = colors[i * 3 + 1] = colors[i * 3 + 2] = g;
