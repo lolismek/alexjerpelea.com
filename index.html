@@ -52,6 +52,7 @@
           <a class="navlink" href="#portfolio">portfolio</a>
           <a class="navlink" href="#experiences">experiences</a>
           <a class="navlink" href="#awards">awards</a>
+          <a class="navlink" href="#press">press</a>
           <a class="navlink" href="#links">links</a>
         </div>
       </nav>
@@ -74,11 +75,15 @@
           <div class="subsection">
             <h3 class="subhead">currently</h3>
             <p class="prose">
-              I&rsquo;m doing research at Columbia&rsquo;s DAPLab, where I study failure modes in
-              multi-agent systems and work on efficient latent communication and memory to strengthen
-              agents&rsquo; &ldquo;Theory of Mind&rdquo;. On the side, I study the manifolds that
-              concepts form inside Transformers, and I run my own experiments on how Transformers
-              could be more efficient and deeper learners.
+              Most of my time goes to a model-diffing project at Columbia&rsquo;s NLP lab: DINOv3 and
+              CLIP have the same architecture and see the same data, so whatever separates them comes
+              from the training objective, and I want to know what language supervision costs a vision
+              model in fine-grained structure. Most of the effort there is method work &mdash; sparse
+              dictionaries whose atoms are subspaces rather than directions, and a resolver I designed
+              to stop them from splitting a single concept across many features. Alongside that I do
+              research at Columbia&rsquo;s DAPLab on a shared belief memory to mitigate inter-agent
+              misalignment in LLM multi-agent systems, drawing on Theory-of-Mind research, and I run
+              my own experiments on how Transformers could be more efficient and deeper learners.
             </p>
           </div>
         </div>
@@ -93,10 +98,21 @@
             <h3 class="subhead">research projects</h3>
             <div class="cards">
               <article class="card">
+                <img class="card-img" src="img/bsf-diffing.png" alt="Feature-pair trajectories over training: partners vs bystanders vs random pairs" loading="lazy" decoding="async" style="aspect-ratio: 2046 / 617; object-fit: contain; background: #fff" />
+                <div class="card-body">
+                  <h3>Model Diffing: CLIP vs. DINOv3</h3>
+                  <p>My main research right now. Diffing vision models CLIP and DINOv3 to understand how CLIP&rsquo;s joint language objective costs it fine-grained visual features. Designed a novel tournament-style top-K algorithm for block-sparse SAEs, significantly reducing feature splitting. Experimented with block-sparse cross-coders, alongside Matryoshka and Archetypal SAEs, in order to find the best diffing recipe. With Amith Ananthram (Anthropic Fellow), in Prof. Kathleen McKeown&rsquo;s lab; in preparation for ICLR.</p>
+                  <div class="meta">
+                    <span class="tag">model diffing</span><span class="tag">interpretability</span><span class="tag">vision</span><span class="tag">wip</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
                 <img class="card-img" src="img/arotranslate.jpg" alt="AroTranslate" loading="lazy" decoding="async" />
                 <div class="card-body">
                   <h3>AroTranslate</h3>
-                  <p>First neural machine-translation system for Aromanian, an endangered Romance language. Largest Aromanian&ndash;Romanian dataset; deployed to 5,000+ users; primary author of the COLING 2025 paper.</p>
+                  <p>Built the first neural MT system for Aromanian, an endangered language related to Romanian; ran the largest bilingual Aromanian&ndash;Romanian data collection and deployed the system online, reaching 5,000+ users. Primary author of the COLING 2025 paper; represented Aromanian preservation at the Forum of European Minority Regions (San Sebastián) and UNESCO&rsquo;s &ldquo;Language Technology for All&rdquo; (Paris).</p>
                   <div class="meta">
                     <span class="tag">nlp</span><span class="tag">translation</span><span class="tag">paper</span>
                     <a href="https://aclanthology.org/2025.coling-main.481/" class="go" target="_blank" rel="noopener">paper →</a>
@@ -106,13 +122,13 @@
               </article>
 
               <article class="card">
-                <img class="card-img" src="img/mas-research.jpg" alt="MAS-research" loading="lazy" decoding="async" />
+                <img class="card-img" src="img/mas-research.jpg" alt="Latent Belief States" loading="lazy" decoding="async" />
                 <div class="card-body">
-                  <h3>MAS-research</h3>
-                  <p>My main research right now: benchmarking where multi-agent systems break, and (largely still in the planning phase) building efficient latent communication and memory to give agents a real &ldquo;Theory of Mind&rdquo;. Done at Columbia&rsquo;s DAPLab.</p>
+                  <h3>Latent Belief States</h3>
+                  <p>A shared belief memory to mitigate inter-agent misalignment in LLM multi-agent systems, drawing on Theory-of-Mind research. I&rsquo;m exploring methods from belief probes to KV-cache sharing to RLVR training, benchmarked against both memory and ToM baselines. At Columbia&rsquo;s DAPLab with Prof. Eugene Wu.</p>
                   <p class="imgcredit">diagram from an NVIDIA blog</p>
                   <div class="meta">
-                    <span class="tag">multi-agent</span><span class="tag">interpretability</span><span class="tag">ongoing</span>
+                    <span class="tag">multi-agent</span><span class="tag">theory of mind</span><span class="tag">ongoing</span>
                     <a href="https://github.com/lolismek/MAS-research" class="go" target="_blank" rel="noopener">read →</a>
                   </div>
                 </div>
@@ -131,38 +147,17 @@
               </article>
 
               <article class="card">
-                <img class="card-img" src="img/romanian-asi.png" alt="Romanian ASI" loading="lazy" decoding="async" />
+                <img class="card-img" src="img/romanian-asi.png" alt="Affective State Identification" loading="lazy" decoding="async" />
                 <div class="card-body">
-                  <h3>Romanian ASI</h3>
-                  <p>A pipeline and benchmark for affective state identification (emotion recognition) in Romanian: mining &ldquo;I feel&rdquo; expressions from web, subtitle, and social-media text, then validating them with an LLM and human annotators. Continual-learning research toward low-resource emotion models.</p>
+                  <h3>Affective State Identification</h3>
+                  <p>Affective states are a more open-ended notion than emotion. Grown from a Romanian pipeline into a multilingual affective-states benchmark, with interpretability experiments that locate emotion manifolds and diff broader affective-state representations against them. At Columbia NLP with Prof. Kathleen McKeown; in preparation for EACL.</p>
                   <div class="meta">
-                    <span class="tag">nlp</span><span class="tag">emotion</span><span class="tag">continual learning</span>
+                    <span class="tag">nlp</span><span class="tag">emotion</span><span class="tag">interpretability</span><span class="tag">wip</span>
                     <a href="https://github.com/Continual-Learning-Emotion-Group/Romanian_ASI" class="go" target="_blank" rel="noopener">read →</a>
                   </div>
                 </div>
               </article>
 
-              <article class="card">
-                <div class="card-body">
-                  <h3>RoMemes</h3>
-                  <p>A multimodal meme corpus for Romanian: the first digital corpus of Romanian-language memes, with political-sentiment detection.</p>
-                  <div class="meta">
-                    <span class="tag">nlp</span><span class="tag">multimodal</span><span class="tag">paper</span>
-                    <a href="https://arxiv.org/abs/2410.15497" class="go" target="_blank" rel="noopener">read →</a>
-                  </div>
-                </div>
-              </article>
-
-              <article class="card">
-                <div class="card-body">
-                  <h3>Reddit Is All You Need</h3>
-                  <p>Authorship profiling for Romanian, learned from Reddit.</p>
-                  <div class="meta">
-                    <span class="tag">nlp</span><span class="tag">paper</span>
-                    <a href="https://arxiv.org/abs/2410.09907" class="go" target="_blank" rel="noopener">read →</a>
-                  </div>
-                </div>
-              </article>
             </div>
           </div>
 
@@ -240,6 +235,18 @@
             <h3 class="subhead">other projects</h3>
             <div class="cards">
               <article class="card">
+                <img class="card-img" src="img/romemes.png" alt="RoMemes: a Romanian meme and its annotation mask" loading="lazy" decoding="async" style="aspect-ratio: 1370 / 520; object-fit: contain; background: #fff" />
+                <div class="card-body">
+                  <h3>RoMemes</h3>
+                  <p>Compiled and annotated the first digital corpus of Romanian-language memes, with specialized text-extraction and political-sentiment-detection algorithms. Co-authored &ldquo;RoMemes: A Multimodal Meme Corpus for the Romanian Language,&rdquo; awarded Best Paper at ConsILR 2024.</p>
+                  <div class="meta">
+                    <span class="tag">nlp</span><span class="tag">multimodal</span><span class="tag">paper</span>
+                    <a href="https://arxiv.org/abs/2410.15497" class="go" target="_blank" rel="noopener">read →</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
                 <img class="card-img" src="img/open-deadlocks.png" alt="open-deadlocks" loading="lazy" decoding="async" />
                 <div class="card-body">
                   <h3>open-deadlocks</h3>
@@ -286,43 +293,59 @@
           <ul class="entries">
             <li class="entry">
               <div class="entry-head">
-                <h3 class="entry-title">Researcher · Columbia DAPLab</h3>
-                <span class="entry-when">2026 &ndash; present</span>
+                <h3 class="entry-title">Model Diffing: CLIP vs. DINOv3</h3>
+                <span class="entry-when">Jan 2026 &ndash; present</span>
               </div>
-              <p class="entry-sub">Columbia University · New York, NY</p>
-              <p class="entry-desc">Studying failure modes in multi-agent systems, and efficient latent communication and memory to strengthen agents&rsquo; Theory of Mind.</p>
+              <p class="entry-sub">Columbia NLP · New York, NY · w/ Amith Ananthram (Anthropic Fellow)</p>
+              <p class="entry-desc">Diffing vision models CLIP and DINOv3 to understand how CLIP&rsquo;s joint language objective costs it fine-grained visual features. Designed a novel tournament-style top-K algorithm for block-sparse SAEs that significantly reduces feature splitting, and experimented with block-sparse cross-coders alongside Matryoshka and Archetypal SAEs to find the best diffing recipe. In preparation for ICLR.</p>
             </li>
             <li class="entry">
               <div class="entry-head">
-                <h3 class="entry-title">Researcher · Columbia NLP Group</h3>
-                <span class="entry-when">Jan 2026 &ndash; present</span>
+                <h3 class="entry-title">Latent Belief States for Multi-Agent Systems</h3>
+                <span class="entry-when">Jun 2026 &ndash; present</span>
               </div>
-              <p class="entry-sub">Columbia University · New York, NY</p>
-              <p class="entry-desc">Extending affective-state-identification models with continual learning for low-resource languages, under Prof. Kathleen McKeown.</p>
+              <p class="entry-sub">Columbia DAPLab · New York, NY · w/ Prof. Eugene Wu &amp; Yusen Zhang</p>
+              <p class="entry-desc">Designing a shared belief memory to mitigate inter-agent misalignment in LLM multi-agent systems, drawing on Theory-of-Mind (ToM) research. Exploring methods ranging from belief probes and KV-cache sharing to RLVR training, benchmarked against both memory and ToM baselines.</p>
+            </li>
+            <li class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">Multilingual Affective State Identification</h3>
+                <span class="entry-when">Jan 2026 &ndash; May 2026</span>
+              </div>
+              <p class="entry-sub">Columbia NLP · New York, NY · w/ Prof. Kathleen McKeown</p>
+              <p class="entry-desc">An affective state is a more open-ended type of emotion. Built a multilingual affective-states benchmark and ran interpretability experiments locating emotion manifolds and diffing broader affective-state representations against them. In preparation for EACL submission.</p>
             </li>
             <li class="entry">
               <div class="entry-head">
                 <h3 class="entry-title">Researcher · AroTranslate</h3>
-                <span class="entry-when">Dec 2023 &ndash; Jan 2025</span>
+                <span class="entry-when">Dec 2023 &ndash; Mar 2025</span>
               </div>
-              <p class="entry-sub">Human Language Technology Center, University of Bucharest · Romania</p>
-              <p class="entry-desc">Built the first neural MT system for Aromanian; ran the largest Aromanian&ndash;Romanian data collection; 5,000+ users. Primary author of the COLING 2025 paper; represented Aromanian preservation at UNESCO&rsquo;s &ldquo;Language Technology for All&rdquo; (Paris).</p>
+              <p class="entry-sub">Human Language Technologies Research Center · Bucharest, Romania</p>
+              <p class="entry-desc">Built the first machine translation system for Aromanian, an endangered language related to Romanian. Ran the largest bilingual Aromanian&ndash;Romanian data collection to date and deployed the system at arotranslate.com, reaching 5,000+ users. Primary author of &ldquo;Dialectal and Low Resource Machine Translation for Aromanian&rdquo; (COLING 2025, Abu Dhabi). Represented Aromanian preservation at the Forum of European Minority Regions (San Sebastián) and UNESCO&rsquo;s &ldquo;Language Technology for All&rdquo; (Paris), as well as in mainstream media.</p>
             </li>
             <li class="entry">
               <div class="entry-head">
-                <h3 class="entry-title">ML / NLP Intern · Veridion</h3>
+                <h3 class="entry-title">ML Engineer Intern · Veridion</h3>
                 <span class="entry-when">Jun 2024 &ndash; Aug 2024</span>
               </div>
               <p class="entry-sub">Veridion · Bucharest, Romania</p>
-              <p class="entry-desc">Built language models extracting insights on 100M+ firms from public web data (employee count, revenue, business tags) for a global business database serving clients like McKinsey &amp; Exiger.</p>
+              <p class="entry-desc">Developed and deployed large language models in production to gain firmographic insight from internet data.</p>
             </li>
             <li class="entry">
               <div class="entry-head">
-                <h3 class="entry-title">ML / NLP Researcher · Romanian National Academy</h3>
-                <span class="entry-when">May 2024 &ndash; Oct 2024</span>
+                <h3 class="entry-title">Research Assistant · RACAI</h3>
+                <span class="entry-when">May 2024 &ndash; Aug 2024</span>
               </div>
-              <p class="entry-sub">AI Institute, Romanian National Academy · Bucharest</p>
-              <p class="entry-desc">Built the first Romanian meme corpus and political-sentiment models; co-authored RoMemes (Best Paper, ConsILR 2024).</p>
+              <p class="entry-sub">Research Institute for Artificial Intelligence, Romanian Academy (RACAI) · Bucharest</p>
+              <p class="entry-desc">Compiled and annotated the first digital corpus of Romanian-language memes; developed specialized text-extraction and political-sentiment-detection algorithms. Co-authored &ldquo;RoMemes: A Multimodal Meme Corpus for the Romanian Language,&rdquo; awarded the Best Paper Award at ConsILR 2024.</p>
+            </li>
+            <li class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">Research Intern · SpeeD Lab, UPB</h3>
+                <span class="entry-when">May 2023 &ndash; Jan 2024</span>
+              </div>
+              <p class="entry-sub">SpeeD Lab, University POLITEHNICA of Bucharest · Romania</p>
+              <p class="entry-desc">Machine learning to classify exercises from sensor data; built custom movement-tracking bracelets and ran a 23-participant data-collection campaign.</p>
             </li>
           </ul>
         </div>
@@ -382,6 +405,52 @@
                 <h3 class="entry-title">National Olympiad in Mathematics, Romania</h3>
                 <p class="entry-sub">Qualified to the national phase</p>
               </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ---------- PRESS ---------- -->
+      <section class="section" id="press">
+        <div class="panel" data-reveal>
+          <h2 class="kicker">// press</h2>
+          <p class="kicker-sub">selected coverage of AroTranslate, the Aromanian translator</p>
+          <ul class="entries">
+            <li class="entry press">
+              <a class="entry-link" href="https://fuen.org/en/article/Meet-the-Innovators-Alexandru-Jerpelea-on-Pioneering-Machine-Translation-to-Preserve-Aromanian" target="_blank" rel="noopener">
+                <h3 class="entry-title">Meet the Innovators: pioneering machine translation to preserve Aromanian</h3>
+                <span class="entry-when">FUEN · feature (EN)</span>
+              </a>
+            </li>
+            <li class="entry press">
+              <a class="entry-link" href="https://www.libertatea.ro/stiri/interviu-alexandru-jerpelea-elevul-de-17-ani-care-a-creat-primul-traducator-de-aromana-am-fost-bombardati-cu-mesaje-din-partea-comunitatii-5020329" target="_blank" rel="noopener">
+                <h3 class="entry-title">&ldquo;The 17-year-old who built the first Aromanian translator&rdquo;</h3>
+                <span class="entry-when">Libertatea · interview</span>
+              </a>
+            </li>
+            <li class="entry press">
+              <a class="entry-link" href="https://www.youtube.com/watch?v=xeqK7a5OwuY" target="_blank" rel="noopener">
+                <h3 class="entry-title">Premiere: the first automatic translator for Aromanian</h3>
+                <span class="entry-when">DIGI24 · TV interview</span>
+              </a>
+            </li>
+            <li class="entry press">
+              <a class="entry-link" href="https://youtu.be/fOyIm69aBzk" target="_blank" rel="noopener">
+                <h3 class="entry-title">On building online translation for Aromanian</h3>
+                <span class="entry-when">Macedonian National TV · interview</span>
+              </a>
+            </li>
+            <li class="entry press">
+              <a class="entry-link" href="https://www.instagram.com/gen.zette/p/C_3O-1Lo0ZJ/?img_index=1" target="_blank" rel="noopener">
+                <h3 class="entry-title">A 17-year-old is saving Aromanian with AI</h3>
+                <span class="entry-when">gen.zette · feature (EN)</span>
+              </a>
+            </li>
+            <li class="entry press">
+              <a class="entry-link" href="https://www.instagram.com/genstiri/p/C_0yqJDNF3D/?img_index=1" target="_blank" rel="noopener">
+                <h3 class="entry-title">What did a 17-year-old do to save Aromanian?</h3>
+                <span class="entry-when">GenȘtiri · feature</span>
+              </a>
             </li>
           </ul>
         </div>

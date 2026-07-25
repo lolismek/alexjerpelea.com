@@ -316,6 +316,7 @@ main {
 /* writing rows: whole title line is the link */
 .entry-link {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.4rem 1rem;
