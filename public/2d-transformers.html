@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2D transformers: reading the depth axis</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '\\(', right: '\\)', display: false}
+  ]});"></script>
+<style>
+  :root {
+    --text: #1c1c1c;
+    --muted: #757575;
+    --link: #5f9b65;
+    --rule: #e0e0e0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--text);
+    font-family: Charter, Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .page {
+    max-width: 682px;
+    margin: 0 auto;
+    padding: 48px 20px 96px;
+  }
+  .back {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.9rem;
+  }
+  h1.site-title {
+    font-size: 2.35rem;
+    line-height: 1.18;
+    font-weight: 600;
+    margin: 0.6em 0 0.25em;
+    letter-spacing: -0.01em;
+  }
+  .byline {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 2.6em;
+  }
+  .byline b { color: #3a3a3a; font-weight: 600; }
+  p.intro {
+    margin: -1.4em 0 2.2em;
+    color: #3a3a3a;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 2.2em 0 0.6em;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid var(--rule);
+  }
+  figure { margin: 1.8em 0; }
+  figure img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  figcaption {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-top: 0.6em;
+  }
+  .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.2em 0; }
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    h1.site-title { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="back"><a href="/mech-interp.html">&larr; back to the mech-interp place</a></p>
+
+<h1 class="site-title">2D transformers: reading the depth axis</h1>
+<div class="byline">by <b>Alex Jerpelea</b> &middot; June 2026 &middot; <a href="https://github.com/lolismek/2D-Transformers">code on GitHub</a></div>
+
+<p class="intro">A transformer's forward pass leaves behind a ladder of hidden states, one per layer. What if a second, small transformer read that ladder as a sequence in its own right &mdash; and what if the two were trained <em>jointly</em>?</p>
+
+<h2>The idea</h2>
+
+<p>Training models on other models' hidden states is not new. Natural-language autoencoders trained decoders to reconstruct text from a latent code (<a href="https://arxiv.org/abs/1511.06349">Bowman et al., 2016</a>); embedding inversion trains a model to decode text back out of frozen embeddings (<a href="https://arxiv.org/abs/2310.06816">Morris et al., 2023</a>); the tuned lens fits per-layer probes that translate intermediate states into predictions (<a href="https://arxiv.org/abs/2303.08112">Belrose et al., 2023</a>); Patchscopes has a model read its own patched-in states in natural language (<a href="https://arxiv.org/abs/2401.06102">Ghandeharioun et al., 2024</a>); Coconut feeds final hidden states back in as inputs to reason in latent space (<a href="https://arxiv.org/abs/2412.06769">Hao et al., 2024</a>). A thinner line of work aggregates the <em>layer axis</em> specifically: ELMo learned a scalar mix over its layers (<a href="https://arxiv.org/abs/1802.05365">Peters et al., 2018</a>), and DenseFormer learns depth-weighted averages of all previous layers at every layer (<a href="https://arxiv.org/abs/2402.02622">Pagliardini et al., 2024</a>).</p>
+
+<p>What all the reader-style work above shares is that the hidden states are <em>frozen</em>: the reader adapts to whatever geometry the base model already has. Here the reader is trained <b>jointly with the backbone, from scratch</b>. A depth-10 backbone \(H\) (a stock <a href="https://github.com/karpathy/nanochat">nanochat</a> model) produces the 11-rung residual ladder \([x_0, h_1, \ldots, h_{10}]\); a small bidirectional reader \(V\) attends over those rungs and <em>owns the readout</em> &mdash; no \(h_{10}\) skip, no gate, no identity init, so \(V\) has to earn its keep against the standard top-state baseline. Because gradients flow into \(H\) through \(V\), the hope is that the backbone bends its hidden-state space to be <em>read</em> &mdash; keeping things in middle layers that the top layer would otherwise discard &mdash; which could be a more interesting geometry, and maybe a more efficient way to scale depth than just stacking more layers.</p>
+
+<h2>What six experiments said</h2>
+
+<p>Measured in validation bits-per-byte on the same data, the reader kept losing &mdash; and each loss localized <em>why</em>. A cheap \(d_V{=}128\) reader loses by +0.056 bpb, even though its depth-attention is genuinely non-degenerate (it nearly ignores the top rung and reads the middle ones). It wasn't the 128-dim readout bottleneck: rank probes bounded that story, and a full-width \(d_V{=}640\) reader still loses (+0.051 iso-FLOP, +0.021 at equal data). It wasn't the backbone's residuals "stealing the reader's job" either &mdash; removing them made the reader <em>worse</em> (+0.030), because the residual stream's online accumulation is what makes the rungs good in the first place. The best current account of all the negatives: the residual stream makes every rung a partial sum of one telescoping series, so \(h_{10}\) already holds the whole sum, and re-aggregating the ladder offline is largely redundant.</p>
+
+<p>The one thing that worked was reader <em>depth</em>: going from 2 to 4 bidirectional reader blocks closes the entire gap and lands exactly on the baseline.</p>
+
+<figure>
+  <img src="/img/2dtf-layers.png" alt="Validation bpb curves: baseline 0.877, 2-block WideReader 0.898, 4-block WideReader 0.877 (tie)">
+  <figcaption><b>A taller depth-reader ties the baseline.</b> Same data budget: top-state baseline 0.877 bpb, full-width reader with 2 blocks 0.898, with 4 blocks 0.877 &mdash; the gap closes entirely. The reader was depth-limited, not width-limited.</figcaption>
+</figure>
+
+<p>The tie has two readings, and they aren't resolved yet: either four blocks let \(V\) extract a readout from the ladder as good as the top state (in which case more depth might <em>beat</em> it), or the extra capacity let \(V\) collapse into mimicking \(h_{10}\), which also lands exactly on baseline. And a tie isn't enough anyway &mdash; the 4-block reader burns ~3.2&times; the FLOPs per token. The open directions: push reader depth further, and change the objective (a BERT-style masked target would make the top layer task-specialized and force it to shed information that middle rungs keep &mdash; for the first time the ladder would be non-redundant, and \(V\) would have a real job).</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Steering without the layer sweep</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '\\(', right: '\\)', display: false}
+  ]});"></script>
+<style>
+  :root {
+    --text: #1c1c1c;
+    --muted: #757575;
+    --link: #5f9b65;
+    --rule: #e0e0e0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--text);
+    font-family: Charter, Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .page {
+    max-width: 682px;
+    margin: 0 auto;
+    padding: 48px 20px 96px;
+  }
+  .back {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.9rem;
+  }
+  h1.site-title {
+    font-size: 2.35rem;
+    line-height: 1.18;
+    font-weight: 600;
+    margin: 0.6em 0 0.25em;
+    letter-spacing: -0.01em;
+  }
+  .byline {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 2.6em;
+  }
+  .byline b { color: #3a3a3a; font-weight: 600; }
+  p.intro {
+    margin: -1.4em 0 2.2em;
+    color: #3a3a3a;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 2.2em 0 0.6em;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid var(--rule);
+  }
+  figure { margin: 1.8em 0; }
+  figure svg { width: 100%; height: auto; }
+  figcaption {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-top: 0.6em;
+  }
+  .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.2em 0; }
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    h1.site-title { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="back"><a href="/mech-interp.html">&larr; back to the mech-interp place</a></p>
+
+<h1 class="site-title">Steering without the layer sweep</h1>
+<div class="byline">by <b>Alex Jerpelea</b> &middot; June 2026 &middot; <a href="https://github.com/lolismek/attention-vector-steering">code on GitHub</a></div>
+
+<p class="intro">An early-stage experiment: activation steering where you never have to sweep layers to find the injection point.</p>
+
+<p>The standard recipe for steering a model with a vector &mdash; add \(v\) to the residual stream and the behavior shifts &mdash; hides a grid search. The vector only works when added at the right layer, at the right strength, so every new model and every new behavior starts with a sweep: inject at layer 5, evaluate, layer 6, evaluate, and so on until something sticks. The result is a single hand-picked layer that is brittle, model-specific, and expensive to find.</p>
+
+<p>The idea here is to make the <em>placement</em> part of the mechanism instead of a hyperparameter. An attention mechanism scores each layer's residual state against the steering vector and distributes the vector across the whole stack in one pass:</p>
+
+$$\alpha \;=\; \mathrm{softmax}_{\,\ell}\big(\,\mathrm{score}(h_\ell,\, v)\,\big), \qquad h_\ell \;\leftarrow\; h_\ell \,+\, \alpha_\ell\, \beta\, v$$
+
+<p>The model itself decides where the vector lands &mdash; and the injection can spread over several adjacent layers instead of concentrating in one hand-picked spot, which no sweep can express. The sweep over layers disappears; only the overall strength \(\beta\) remains.</p>
+
+<figure>
+  <svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" font-family="'Gill Sans','Gill Sans MT',Calibri,'Helvetica Neue',Arial,sans-serif" font-size="13">
+    <defs>
+      <marker id="ag2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#5f9b65"/>
+      </marker>
+      <marker id="am2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#b5b5b5"/>
+      </marker>
+    </defs>
+
+    <!-- left panel: layer sweep -->
+    <text x="160" y="30" text-anchor="middle" fill="#3a3a3a" font-weight="600" font-size="15">layer sweep</text>
+
+    <rect x="42" y="146" width="46" height="30" rx="6" fill="#edf5ee" stroke="#5f9b65" stroke-width="1.6"/>
+    <text x="65" y="166" text-anchor="middle" fill="#3e7a44" font-weight="600" font-style="italic">v</text>
+
+    <!-- layer boxes left -->
+    <rect x="180" y="52"  width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="240" y="72"  text-anchor="middle" fill="#555">layer 6</text>
+    <rect x="180" y="96"  width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="240" y="116" text-anchor="middle" fill="#555">layer 5</text>
+    <rect x="180" y="140" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="240" y="160" text-anchor="middle" fill="#555">layer 4</text>
+    <rect x="180" y="184" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="240" y="204" text-anchor="middle" fill="#555">layer 3</text>
+    <rect x="180" y="228" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="240" y="248" text-anchor="middle" fill="#555">layer 2</text>
+    <rect x="180" y="272" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="240" y="292" text-anchor="middle" fill="#555">layer 1</text>
+
+    <!-- sweep arrows: dashed grey tries, one green pick -->
+    <line x1="90" y1="155" x2="174" y2="67"  stroke="#b5b5b5" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#am2)"/>
+    <line x1="90" y1="157" x2="174" y2="111" stroke="#b5b5b5" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#am2)"/>
+    <line x1="90" y1="163" x2="174" y2="199" stroke="#b5b5b5" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#am2)"/>
+    <line x1="90" y1="165" x2="174" y2="243" stroke="#b5b5b5" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#am2)"/>
+    <line x1="90" y1="167" x2="174" y2="287" stroke="#b5b5b5" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#am2)"/>
+    <line x1="90" y1="161" x2="174" y2="155" stroke="#5f9b65" stroke-width="2.4" marker-end="url(#ag2)"/>
+
+    <text x="126" y="322" text-anchor="middle" fill="#757575">try each layer, keep the best one</text>
+
+    <!-- divider -->
+    <line x1="330" y1="46" x2="330" y2="308" stroke="#e0e0e0"/>
+
+    <!-- right panel: attention -->
+    <text x="490" y="30" text-anchor="middle" fill="#3a3a3a" font-weight="600" font-size="15">attention over layers</text>
+
+    <rect x="372" y="146" width="46" height="30" rx="6" fill="#edf5ee" stroke="#5f9b65" stroke-width="1.6"/>
+    <text x="395" y="166" text-anchor="middle" fill="#3e7a44" font-weight="600" font-style="italic">v</text>
+
+    <!-- layer boxes right -->
+    <rect x="510" y="52"  width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="570" y="72"  text-anchor="middle" fill="#555">layer 6</text>
+    <rect x="510" y="96"  width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="570" y="116" text-anchor="middle" fill="#555">layer 5</text>
+    <rect x="510" y="140" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="570" y="160" text-anchor="middle" fill="#555">layer 4</text>
+    <rect x="510" y="184" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="570" y="204" text-anchor="middle" fill="#555">layer 3</text>
+    <rect x="510" y="228" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="570" y="248" text-anchor="middle" fill="#555">layer 2</text>
+    <rect x="510" y="272" width="120" height="30" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/><text x="570" y="292" text-anchor="middle" fill="#555">layer 1</text>
+
+    <!-- attention arrows: all green, width/opacity = alpha -->
+    <line x1="420" y1="155" x2="504" y2="67"  stroke="#5f9b65" stroke-width="1.2" opacity="0.35" marker-end="url(#ag2)"/>
+    <line x1="420" y1="157" x2="504" y2="111" stroke="#5f9b65" stroke-width="2.6" opacity="0.85" marker-end="url(#ag2)"/>
+    <line x1="420" y1="161" x2="504" y2="155" stroke="#5f9b65" stroke-width="3.4" opacity="1"    marker-end="url(#ag2)"/>
+    <line x1="420" y1="163" x2="504" y2="199" stroke="#5f9b65" stroke-width="1.8" opacity="0.6"  marker-end="url(#ag2)"/>
+    <line x1="420" y1="165" x2="504" y2="243" stroke="#5f9b65" stroke-width="1.0" opacity="0.3"  marker-end="url(#ag2)"/>
+    <line x1="420" y1="167" x2="504" y2="287" stroke="#5f9b65" stroke-width="0.8" opacity="0.22" marker-end="url(#ag2)"/>
+
+    <text x="456" y="322" text-anchor="middle" fill="#757575">&#945;&#8467; decides, in one pass</text>
+  </svg>
+  <figcaption><b>No more sweeping.</b> Left: the standard recipe tries the steering vector at one layer at a time and keeps the best. Right: attention scores every layer's residual state against \(v\) and distributes the vector across the stack in a single pass, with weights \(\alpha_\ell\) (arrow thickness).</figcaption>
+</figure>
+
+<p>Status: early-stage &mdash; the repo currently holds a Qwen2.5-1.5B harness and the idea. The interesting questions are still open: does the attention pick the same layers a sweep would, does spreading beat concentrating, and do the learned weights transfer across behaviors within one model.</p>
+
+</div>
+</body>
+</html>

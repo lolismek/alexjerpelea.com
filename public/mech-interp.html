@@ -130,6 +130,18 @@
   <p class="desc">Latent chain-of-thought that never leaves the middle of the model: the thinking loop runs only through Qwen's workspace layers, with Jacobian-lens linear bridges skipping the sensory and motor layers entirely. The mechanics work and give a small lift over direct answering &mdash; but the lift doesn't grow with more steps.</p>
 </a>
 
+<a class="card" href="/2d-transformers.html">
+  <h2>2D transformers: reading the depth axis</h2>
+  <p class="meta">June 2026</p>
+  <p class="desc">A second small transformer is trained jointly with the backbone to read the ladder of hidden states &mdash; the depth axis &mdash; as a sequence and produce the readout, hoping the backbone bends its space to be read. Six experiments in, the depth-reader ties but never beats the top-layer readout: the residual stream already telescopes the whole ladder into the top state.</p>
+</a>
+
+<a class="card" href="/attention-steering.html">
+  <h2>Steering without the layer sweep</h2>
+  <p class="meta">June 2026</p>
+  <p class="desc">Early-stage: activation steering where an attention mechanism decides how the steering vector is distributed across layers, so you never grid-sweep for the one right injection point.</p>
+</a>
+
 </div>
 </body>
 </html>
