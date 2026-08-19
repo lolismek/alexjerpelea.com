@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alex's mech-interp reading list</title>
+<style>
+  :root {
+    --text: #1c1c1c;
+    --muted: #757575;
+    --link: #5f9b65;
+    --rule: #e0e0e0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--text);
+    font-family: Charter, Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .page {
+    max-width: 682px;
+    margin: 0 auto;
+    padding: 48px 20px 96px;
+  }
+  .back {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.9rem;
+  }
+  h1.site-title {
+    font-size: 2.35rem;
+    line-height: 1.18;
+    font-weight: 600;
+    margin: 0.6em 0 0.25em;
+    letter-spacing: -0.01em;
+  }
+  .byline {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 2.6em;
+  }
+  .byline b { color: #3a3a3a; font-weight: 600; }
+  p.intro {
+    margin: -1.4em 0 2.2em;
+    color: #3a3a3a;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 2.2em 0 0.6em;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid var(--rule);
+  }
+  ul.papers {
+    margin: 0;
+    padding-left: 1.3em;
+  }
+  ul.papers li {
+    margin-bottom: 0.55em;
+  }
+  .who {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    h1.site-title { font-size: 1.8rem; }
+    .who { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="back"><a href="/mech-interp.html">&larr; back to the mech-interp place</a></p>
+
+<h1 class="site-title">Reading list</h1>
+<div class="byline">by <b>Alex Jerpelea</b></div>
+
+<p class="intro">Everything I consumed to learn mechanistic interpretability, extracted from my research notes. Interp papers first, roughly in chronological order; papers from the same notes that aren't about interp (multi-agent systems, latent communication, agent memory, architectures) are collected at the end.</p>
+
+<h2>Start here</h2>
+<ul class="papers">
+<li><a href="https://learn.arena.education/chapter1_transformer_interp/">ARENA &mdash; Transformer Interpretability</a> <span class="who">&mdash; hands-on course</span></li>
+<li><a href="https://learnmechinterp.com">learnmechinterp.com</a></li>
+<li><a href="https://www.alignmentforum.org/posts/jP9KDyMkchuv6tHwm/how-to-become-a-mechanistic-interpretability-researcher">How to Become a Mechanistic Interpretability Researcher</a> <span class="who">&mdash; Neel Nanda</span></li>
+</ul>
+
+<h2>Mechanistic interpretability</h2>
+<ul class="papers">
+<li><a href="https://transformer-circuits.pub/2022/toy_model/index.html">Toy Models of Superposition</a> <span class="who">&mdash; Nelson Elhage et al., 2022</span></li>
+<li><a href="https://arxiv.org/abs/2211.00593">Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 small</a> <span class="who">&mdash; Kevin Wang et al., 2022</span></li>
+<li><a href="https://arxiv.org/abs/2212.03827">Discovering Latent Knowledge in Language Models Without Supervision</a> <span class="who">&mdash; Collin Burns et al., 2022</span></li>
+<li><a href="https://www.lesswrong.com/posts/5spBue2z2tw4JuDCx/steering-gpt-2-xl-by-adding-an-activation-vector">Steering GPT-2-XL by Adding an Activation Vector</a> <span class="who">&mdash; Alexander Turner et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2310.06824">The Geometry of Truth: Emergent Linear Structure in Large Language Model Representations of True/False Datasets</a> <span class="who">&mdash; Samuel Marks et al., 2023</span></li>
+<li><a href="https://transformer-circuits.pub/2023/monosemantic-features/index.html">Towards Monosemanticity: Decomposing Language Models With Dictionary Learning</a> <span class="who">&mdash; Trenton Bricken et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2311.03658">The Linear Representation Hypothesis and the Geometry of Large Language Models</a> <span class="who">&mdash; Kiho Park et al., 2023</span></li>
+<li><a href="https://functions.baulab.info/">Function Vectors in Large Language Models</a> <span class="who">&mdash; Eric Todd et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2404.16014">Improving Dictionary Learning with Gated Sparse Autoencoders</a> <span class="who">&mdash; Senthooran Rajamanoharan et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2405.14860">Not All Language Model Features Are One-Dimensionally Linear</a> <span class="who">&mdash; Joshua Engels et al., 2024</span></li>
+<li><a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html">Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet</a> <span class="who">&mdash; Adly Templeton et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2405.15943">Transformers represent belief state geometry in their residual stream</a> <span class="who">&mdash; Adam Shai et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2406.01506">The Geometry of Categorical and Hierarchical Concepts in Large Language Models</a> <span class="who">&mdash; Kiho Park et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2406.11944">Transcoders Find Interpretable LLM Feature Circuits</a> <span class="who">&mdash; Jacob Dunefsky et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2408.05147">Gemma Scope: Open Sparse Autoencoders Everywhere All At Once on Gemma 2</a> <span class="who">&mdash; Tom Lieberum et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2409.14507">A is for Absorption: Studying Feature Splitting and Absorption in Sparse Autoencoders</a> <span class="who">&mdash; David Chanin et al., 2024</span></li>
+<li><a href="https://transformer-circuits.pub/drafts/crosscoders/index.html">Sparse Crosscoders for Cross-Layer Features and Model Diffing</a> <span class="who">&mdash; Jack Lindsey et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2412.08686">LatentQA: Teaching LLMs to Decode Activations Into Natural Language</a> <span class="who">&mdash; Alexander Pan et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2501.00070">ICLR: In-Context Learning of Representations</a> <span class="who">&mdash; Core Francisco Park et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.12892">Archetypal SAE: Adaptive and Stable Dictionary Learning for Concept Extraction in Large Vision Models</a> <span class="who">&mdash; Thomas Fel et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.01954">Constrained belief updates explain geometric structures in transformer representations</a> <span class="who">&mdash; Mateusz Piotrowski et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.03407">Detecting Strategic Deception Using Linear Probes</a> <span class="who">&mdash; Nicholas Goldowsky-Dill et al., 2025</span></li>
+<li><a href="https://transformer-circuits.pub/2025/crosscoder-diffing-update/index.html">Insights on Crosscoder Model Diffing</a> <span class="who">&mdash; Siddharth Mishra-Sharma et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.04878">Sparse Autoencoders Do Not Find Canonical Units of Analysis</a> <span class="who">&mdash; Patrick Leask et al., 2025</span></li>
+<li><a href="https://transformer-circuits.pub/2025/attribution-graphs/methods.html">Circuit Tracing: Revealing Computational Graphs in Language Models</a> <span class="who">&mdash; Emmanuel Ameisen et al., 2025</span></li>
+<li><a href="https://transformer-circuits.pub/2025/attribution-graphs/biology.html">On the Biology of a Large Language Model</a> <span class="who">&mdash; Jack Lindsey et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2503.09532">SAEBench: A Comprehensive Benchmark for Sparse Autoencoders in Language Model Interpretability</a> <span class="who">&mdash; Adam Karvonen et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2505.11756">Feature Hedging: Correlated Features Break Narrow Sparse Autoencoders</a> <span class="who">&mdash; David Chanin et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2505.18235">The Origins of Representation Manifolds in Large Language Models</a> <span class="who">&mdash; Alexander Modell et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2506.10805">Detecting High-Stakes Interactions with Activation Probes</a> <span class="who">&mdash; Alex McKenzie et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2506.03093">From Flat to Hierarchical: Extracting Sparse Representations with Matching Pursuit</a> <span class="who">&mdash; Valérie Costa et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2506.01197">Incorporating Hierarchical Semantics in Sparse Autoencoder Architectures</a> <span class="who">&mdash; Mark Muchane et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2507.06265">SPARC: Concept-Aligned Sparse Autoencoders for Cross-Model and Cross-Modal Interpretability</a> <span class="who">&mdash; Ali Nasiri-Sarvi et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2509.22033">OrtSAE: Orthogonal Sparse Autoencoders Uncover Atomic Features</a> <span class="who">&mdash; Anton Korznikov et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.01070">Eliciting Secret Knowledge from Language Models</a> <span class="who">&mdash; Bartosz Cywiński et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.08638">Into the Rabbit Hull: From Task-Relevant Concepts in DINO to Minkowski Geometry</a> <span class="who">&mdash; Thomas Fel et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2512.15674">Activation Oracles: Training and Evaluating LLMs as General-Purpose Activation Explainers</a> <span class="who">&mdash; Adam Karvonen et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2512.22471">The Bayesian Geometry of Transformer Attention</a> <span class="who">&mdash; Naman Aggarwal et al., 2025</span></li>
+<li><a href="https://transformer-circuits.pub/2026/workspace/index.html">Verbalizable Representations Form a Global Workspace in Language Models</a> <span class="who">&mdash; Wes Gurnee et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.11729">Cross-Architecture Model Diffing with Crosscoders: Unsupervised Discovery of Differences Between LLMs</a> <span class="who">&mdash; Thomas Jiralerspong et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.11881">From Atoms to Trees: Building a Structured Feature Forest with Hierarchical Sparse Autoencoders</a> <span class="who">&mdash; Yifan Luo et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.15029">Symmetry in language statistics shapes the geometry of model representations</a> <span class="who">&mdash; Dhruva Karkada et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.14687">SynthSAEBench: Evaluating Sparse Autoencoders on Scalable Realistic Synthetic Data</a> <span class="who">&mdash; David Chanin et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.02315">The Shape of Beliefs: Geometry, Dynamics, and Interventions along Representation Manifolds of Language Models&#x27; Posteriors</a> <span class="who">&mdash; Raphael Sarfati et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.02385">Transformers learn factored representations</a> <span class="who">&mdash; Adam Shai et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.01151">Detecting Multi-Agent Collusion Through Multi-Agent Interpretability</a> <span class="who">&mdash; Aaron Rose et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.28119">Do Sparse Autoencoders Capture Concept Manifolds?</a> <span class="who">&mdash; Usha Bhalla et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.02685">Finding Belief Geometries with Sparse Autoencoders</a> <span class="who">&mdash; Matthew Levinson, 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.03436">MetaSAEs: Joint Training with a Decomposability Penalty Produces More Atomic Sparse Autoencoder Latents</a> <span class="who">&mdash; Matthew Levinson, 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.25783">Subliminal Steering: Stronger Encoding of Hidden Signals</a> <span class="who">&mdash; George Morgulis et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.23821">Hierarchical Concept Geometry in Language Models Emerges from Word Co-occurrence</a> <span class="who">&mdash; Andres Nava et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.05115">Manifold Steering Reveals the Shared Geometry of Neural Network Representation and Behavior</a> <span class="who">&mdash; Daniel Wurgaft et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.09224">SMIXAE: Towards Unsupervised Manifold Discovery in Language Models</a> <span class="who">&mdash; Collin Francel, 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.12412">Stories in Space: In-Context Learning Trajectories in Conceptual Belief Space</a> <span class="who">&mdash; Eric J. Bigelow et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.07922">Tree SAE: Learning Hierarchical Feature Structures in Sparse Autoencoders</a> <span class="who">&mdash; Tue Cao et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2606.25234">Structuring Sparsity: Block-Sparse Featurizers Capture Visual Concept Manifolds</a> <span class="who">&mdash; Thomas Fel et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2606.06333">Subspace-Aware Sparse Autoencoders for Effective Mechanistic Interpretability</a> <span class="who">&mdash; Seyed Arshan Dalili et al., 2026</span></li>
+</ul>
+
+<h2>Other AI papers</h2>
+<ul class="papers">
+<li><a href="http://erichorvitz.com/ftp/mixedin.pdf">Uncertainty, Action, and Interaction: In Pursuit of Mixed-Initiative Computing</a> <span class="who">&mdash; Eric Horvitz, 1999</span></li>
+<li><a href="https://arxiv.org/abs/1512.03385">Deep Residual Learning for Image Recognition</a> <span class="who">&mdash; Kaiming He et al., 2015</span></li>
+<li><a href="https://arxiv.org/abs/1807.03819">Universal Transformers</a> <span class="who">&mdash; Mostafa Dehghani et al., 2018</span></li>
+<li><a href="https://arxiv.org/abs/1905.07799">Adaptive Attention Span in Transformers</a> <span class="who">&mdash; Sainbayar Sukhbaatar et al., 2019</span></li>
+<li><a href="https://arxiv.org/abs/2001.08361">Scaling Laws for Neural Language Models</a> <span class="who">&mdash; Jared Kaplan et al., 2020</span></li>
+<li><a href="https://arxiv.org/abs/2002.07028">Low-Rank Bottleneck in Multi-head Attention Models</a> <span class="who">&mdash; Srinadh Bhojanapalli et al., 2020</span></li>
+<li><a href="https://arxiv.org/abs/2103.00020">Learning Transferable Visual Models From Natural Language Supervision</a> <span class="who">&mdash; Alec Radford et al., 2021</span></li>
+<li><a href="https://arxiv.org/abs/2104.14294">Emerging Properties in Self-Supervised Vision Transformers</a> <span class="who">&mdash; Mathilde Caron et al., 2021</span></li>
+<li><a href="https://www.ifaamas.org/Proceedings/aamas2021/pdfs/p964.pdf">Multi-Agent Graph-Attention Communication and Teaming</a> <span class="who">&mdash; Yaru Niu et al., 2021</span></li>
+<li><a href="https://arxiv.org/abs/2305.19118">Encouraging Divergent Thinking in Large Language Models through Multi-Agent Debate</a> <span class="who">&mdash; Tian Liang et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2305.11595">Examining Inter-Consistency of Large Language Models Collaboration: An In-depth Analysis via Debate</a> <span class="who">&mdash; Kai Xiong et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2305.13245">GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints</a> <span class="who">&mdash; Joshua Ainslie et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2307.06945">In-context Autoencoder for Context Compression in a Large Language Model</a> <span class="who">&mdash; Tao Ge et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2309.10668">Language Modeling Is Compression</a> <span class="who">&mdash; Grégoire Delétang et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2310.02170">A Dynamic LLM-Powered Agent Network for Task-Oriented Agent Collaboration</a> <span class="who">&mdash; Zijun Liu et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2310.15421">FANToM: A Benchmark for Stress-testing Machine Theory of Mind in Interactions</a> <span class="who">&mdash; Hyunwoo Kim et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2310.06272">Let Models Speak Ciphers: Multiagent Debate through Embeddings</a> <span class="who">&mdash; Chau Pham et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2310.10701">Theory of Mind for Multi-Agent Collaboration via Large Language Models</a> <span class="who">&mdash; Huao Li et al., 2023</span></li>
+<li><a href="https://arxiv.org/abs/2312.10256">Multi-agent Reinforcement Learning: A Comprehensive Survey</a> <span class="who">&mdash; Dom Huh et al., 2023</span></li>
+<li><a href="https://snap-research.github.io/locomo/">Evaluating Very Long-Term Conversational Memory of LLM Agents (LoCoMo)</a> <span class="who">&mdash; Adyasha Maharana et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2402.16823">Language Agents as Optimizable Graphs</a> <span class="who">&mdash; Mingchen Zhuge et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2404.14469">SnapKV: LLM Knows What You are Looking for Before Generation</a> <span class="who">&mdash; Yuhong Li et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2407.02465">Belief sharing: a blessing or a curse</a> <span class="who">&mdash; Ozan Çatal et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2407.07086">Hypothetical Minds: Scaffolding Theory of Mind for Multi-Agent Tasks with Large Language Models</a> <span class="who">&mdash; Logan Cross et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2407.04503">When LLMs Play the Telephone Game: Cultural Attractors as Conceptual Tools to Evaluate LLMs in Multi-turn Settings</a> <span class="who">&mdash; Jérémy Perez et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2410.11905">A Scalable Communication Protocol for Networks of Large Language Models</a> <span class="who">&mdash; Samuele G. Marro et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2410.02506">Cut the Crap: An Economical Communication Pipeline for LLM-based Multi-Agent Systems</a> <span class="who">&mdash; Guibin Zhang et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2410.11782">G-Designer: Architecting Multi-agent Communication Topologies via Graph Neural Networks</a> <span class="who">&mdash; Guibin Zhang et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2411.02820">DroidSpeak: KV Cache Sharing for Cross-LLM Communication and Multi-LLM Serving</a> <span class="who">&mdash; Yuhan Liu et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2411.04468">Magentic-One: A Generalist Multi-Agent System for Solving Complex Tasks</a> <span class="who">&mdash; Adam Fourney et al., 2024</span></li>
+<li><a href="https://arxiv.org/abs/2501.14082">Communicating Activations Between Language Model Agents</a> <span class="who">&mdash; Vignav Ramesh et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2501.15355">Large Language Models as Theory of Mind Aware Generative Agents with Counterfactual Reflection</a> <span class="who">&mdash; Bo Yang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2501.01039">MSWA: Refining Local Attention with Multi-ScaleWindow Attention</a> <span class="who">&mdash; Yixing Xu et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2501.00935">Multiscaled Multi-Head Attention-Based Video Transformer Network for Hand Gesture Recognition</a> <span class="who">&mdash; Mallika Garg et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2501.13200">SRMT: Shared Memory for Multi-agent Lifelong Pathfinding</a> <span class="who">&mdash; Alsu Sagirova et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2501.00663">Titans: Learning to Memorize at Test Time</a> <span class="who">&mdash; Ali Behrouz et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.15676">AutoToM: Scaling Model-based Mental Inference via Automated Agent Modeling</a> <span class="who">&mdash; Zhining Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.05453">LLM-Powered Decentralized Generative Agents with Adaptive Hierarchical Knowledge Graph for Cooperative Planning</a> <span class="who">&mdash; Hanqing Yang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.18439">MAPoRL: Multi-Agent Post-Co-Training for Collaborative Large Language Models with Reinforcement Learning</a> <span class="who">&mdash; Chanwoo Park et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.04180">Multi-agent Architecture Search via Agentic Supernet</a> <span class="who">&mdash; Guibin Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.05171">Scaling up Test-Time Compute with Latent Reasoning: A Recurrent Depth Approach</a> <span class="who">&mdash; Jonas Geiping et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2502.04780">SiriuS: Self-improving Multi-agent Systems via Bootstrapped Reasoning</a> <span class="who">&mdash; Wanjia Zhao et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2503.13657">Why Do Multi-Agent LLM Systems Fail?</a> <span class="who">&mdash; Mert Cemri et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2504.05047">Debate Only When Necessary: Adaptive Multiagent Collaboration for Efficient LLM Reasoning</a> <span class="who">&mdash; Sugyeong Eo et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2504.19413">Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</a> <span class="who">&mdash; Prateek Chhikara et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2505.18279">Collaborative Memory: Multi-User Memory Sharing in LLM Agents with Dynamic Access Control</a> <span class="who">&mdash; Alireza Rezazadeh et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2505.15778">Soft Thinking: Unlocking the Reasoning Potential of LLMs in Continuous Concept Space</a> <span class="who">&mdash; Zhen Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2505.17656">Too Consistent to Detect: A Study of Self-Consistent Errors in LLMs</a> <span class="who">&mdash; Hexiang Tan et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2505.00212">Which Agent Causes Task Failures and When? On Automated Failure Attribution of LLM Multi-Agent Systems</a> <span class="who">&mdash; Shaokun Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2506.08292">From Debate to Equilibrium: Belief-Driven Multi-Agent LLM Reasoning via Bayesian Nash Equilibrium</a> <span class="who">&mdash; Xie Yi et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2506.07398">G-Memory: Tracing Hierarchical Memory for Multi-Agent Systems</a> <span class="who">&mdash; Guibin Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2507.07957">MIRIX: Multi-Agent Memory System for LLM-Based Agents</a> <span class="who">&mdash; Yu Wang et al., 2025</span></li>
+<li><a href="https://aclanthology.org/2025.findings-acl.259/">MegaAgent: A Large-Scale Autonomous LLM-based Multi-Agent System Without Predefined SOPs</a> <span class="who">&mdash; Qian Wang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2508.19828">Memory-R1: Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement Learning</a> <span class="who">&mdash; Sikuan Yan et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2508.04903">RCR-Router: Efficient Role-Aware Context Routing for Multi-Agent LLM Systems with Structured Memory</a> <span class="who">&mdash; Jun Liu et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2509.21981">Collaborative Belief Reasoning with LLMs for Efficient Multi-Agent Collaboration</a> <span class="who">&mdash; Zhimin Wang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2509.25911">Mem-α: Learning Memory Construction via Reinforcement Learning</a> <span class="who">&mdash; Yu Wang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2509.24704">MemGen: Weaving Generative Latent Memory for Self-Evolving Agents</a> <span class="who">&mdash; Guibin Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.03784">Allocation of Parameters in Transformers</a> <span class="who">&mdash; Ruoxi Yu et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.03215">Cache-to-Cache: Direct Semantic Communication Between Large Language Models</a> <span class="who">&mdash; Tianyu Fu et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.07358">Encode, Think, Decode: Scaling test-time reasoning with recursive latent thoughts</a> <span class="who">&mdash; Yeskendir Koishekenov et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.12872">KVCOMM: Online Cross-context KV-cache Communication for Efficient LLM-based Multi-agent Systems</a> <span class="who">&mdash; Hancheng Ye et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.03346">KVComm: Enabling Efficient LLM Communication through Selective KV Sharing</a> <span class="who">&mdash; Xiangyu Shi et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.04851">LEGOMem: Modular Procedural Memory for Multi-agent LLM Systems for Workflow Automation</a> <span class="who">&mdash; Dongge Han et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2510.01285">LLM-based Multi-Agent Blackboard System for Information Discovery in Data Science</a> <span class="who">&mdash; Alireza Salemi et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2511.14780">Ask WhAI:Probing Belief Formation in Role-Primed LLM Agents</a> <span class="who">&mdash; Keith Moore et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2511.09149">Enabling Agents to Communicate Entirely in Latent Space</a> <span class="who">&mdash; Zhuoyun Du et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2511.20639">Latent Collaboration in Multi-Agent Systems</a> <span class="who">&mdash; Jiaru Zou et al., 2025</span></li>
+<li><a href="https://aclanthology.org/2025.emnlp-main.623/">Understanding the Information Propagation Effects of Communication Topologies in LLM-based Multi-Agent Systems</a> <span class="who">&mdash; Xu Shen et al., 2025</span></li>
+<li><a href="https://openreview.net/forum?id=TWC4gLoAxY">Human&ndash;AI collaboration using symbolic structure</a> <span class="who">&mdash; OpenReview paper, description from my notes</span></li>
+<li><a href="https://arxiv.org/abs/2512.18746">MemEvolve: Meta-Evolution of Agent Memory Systems</a> <span class="who">&mdash; Guibin Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2512.24601">Recursive Language Models</a> <span class="who">&mdash; Alex L. Zhang et al., 2025</span></li>
+<li><a href="https://arxiv.org/abs/2601.21742">Epistemic Context Learning: Building Trust the Right Way in LLM-Based Multi-Agent Systems</a> <span class="who">&mdash; Ruiwen Zhou et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2601.05505">FlashMem: Distilling Intrinsic Latent Memory via Computation Reuse</a> <span class="who">&mdash; Yubo Hou et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2601.14192">Toward Efficient Agents: Memory, Tool learning, and Planning</a> <span class="who">&mdash; Xiaofa Yang et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.03036">LatentMem: Customizing Latent Memory for Multi-Agent Systems</a> <span class="who">&mdash; Muxin Fu et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2602.04234">When Does Multi-Agent Collaboration Help? An Entropy Perspective</a> <span class="who">&mdash; Yuxuan Zhao et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2603.16264">Adaptive Theory of Mind for LLM-based Multi-Agent Coordination</a> <span class="who">&mdash; Chunjiang Mu et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2603.26233">Ask or Assume? Uncertainty-Aware Clarification-Seeking in Coding Agents</a> <span class="who">&mdash; Nicholas Edwards et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2603.15031">Attention Residuals</a> <span class="who">&mdash; Kimi Team et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2603.00142">Evaluating Theory of Mind and Internal Beliefs in LLM-Based Multi-agent Systems</a> <span class="who">&mdash; Adam Kostka et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2603.22386">From Static Templates to Dynamic Runtime Graphs: A Survey of Workflow Optimization for LLM Agents</a> <span class="who">&mdash; Ling Yue et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.01658">CORAL: Towards Autonomous Multi-Agent Evolution for Open-Ended Discovery</a> <span class="who">&mdash; Ao Qu et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.06452">Learning to Interrupt in Language-based Multi-agent Communication</a> <span class="who">&mdash; Danqing Wang et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.19795">Prism: An Evolutionary Memory Substrate for Multi-Agent Open-Ended Discovery</a> <span class="who">&mdash; Suyash Mishra, 2026</span></li>
+<li><a href="https://arxiv.org/abs/2604.25917">Recursive Multi-Agent Systems</a> <span class="who">&mdash; Xiyuan Yang et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.21951">Dynamic Mixture of Latent Memories for Self-Evolving Agents</a> <span class="who">&mdash; Dianzhi Yu et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.20563">Multi-agent Collaboration with State Management</a> <span class="who">&mdash; Mengyang Liu et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.09539">TacoMAS: Test-Time Co-Evolution of Topology and Capability in LLM-based Multi-Agent Systems</a> <span class="who">&mdash; Chengdong Xu et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2605.20548">What Do Agents Communicate? Characterizing Information Exchange in Multi-Agent Systems</a> <span class="who">&mdash; Yongchan Chun et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2606.10662">Decentralized Multi-Agent Systems with Shared Context</a> <span class="who">&mdash; Yuzhen Mao et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2606.06087">LatentSkill: From In-Context Textual Skills to In-Weight Latent Skills for LLM Agents</a> <span class="who">&mdash; Ao Yu et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2606.00655">Scaling Behavior of Single LLM-Driven Multi-Agent Systems</a> <span class="who">&mdash; Jialin Li et al., 2026</span></li>
+<li><a href="https://arxiv.org/abs/2606.05304">What Should Agents Say? Action-state Communication for Efficient Multi-Agent Systems</a> <span class="who">&mdash; Chengen Huang et al., 2026</span></li>
+</ul>
+
+</div>
+</body>
+</html>
