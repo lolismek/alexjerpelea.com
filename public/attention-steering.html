@@ -90,13 +90,13 @@
 
 <p class="intro">An early-stage experiment: activation steering where you never have to sweep layers to find the injection point.</p>
 
-<p>The standard recipe for steering a model with a vector &mdash; add \(v\) to the residual stream and the behavior shifts &mdash; hides a grid search. The vector only works when added at the right layer, at the right strength, so every new model and every new behavior starts with a sweep: inject at layer 5, evaluate, layer 6, evaluate, and so on until something sticks. The result is a single hand-picked layer that is brittle, model-specific, and expensive to find.</p>
+<p>The standard recipe for steering a model with a vector (add \(v\) to the residual stream and the behavior shifts) hides a grid search. The vector only works when added at the right layer, at the right strength, so every new model and every new behavior starts with a sweep: inject at layer 5, evaluate, layer 6, evaluate, and so on until something sticks. The result is a single hand-picked layer that is brittle, model-specific, and expensive to find.</p>
 
 <p>The idea here is to make the <em>placement</em> part of the mechanism instead of a hyperparameter. An attention mechanism scores each layer's residual state against the steering vector and distributes the vector across the whole stack in one pass:</p>
 
 $$\alpha \;=\; \mathrm{softmax}_{\,\ell}\big(\,\mathrm{score}(h_\ell,\, v)\,\big), \qquad h_\ell \;\leftarrow\; h_\ell \,+\, \alpha_\ell\, \beta\, v$$
 
-<p>The model itself decides where the vector lands &mdash; and the injection can spread over several adjacent layers instead of concentrating in one hand-picked spot, which no sweep can express. The sweep over layers disappears; only the overall strength \(\beta\) remains.</p>
+<p>The model itself decides where the vector lands, and the injection can spread over several adjacent layers instead of concentrating in one hand-picked spot, which no sweep can express. The sweep over layers disappears; only the overall strength \(\beta\) remains.</p>
 
 <figure>
   <svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" font-family="'Gill Sans','Gill Sans MT',Calibri,'Helvetica Neue',Arial,sans-serif" font-size="13">
@@ -163,7 +163,7 @@ $$\alpha \;=\; \mathrm{softmax}_{\,\ell}\big(\,\mathrm{score}(h_\ell,\, v)\,\big
   <figcaption><b>No more sweeping.</b> Left: the standard recipe tries the steering vector at one layer at a time and keeps the best. Right: attention scores every layer's residual state against \(v\) and distributes the vector across the stack in a single pass, with weights \(\alpha_\ell\) (arrow thickness).</figcaption>
 </figure>
 
-<p>Status: early-stage &mdash; the repo currently holds a Qwen2.5-1.5B harness and the idea. The interesting questions are still open: does the attention pick the same layers a sweep would, does spreading beat concentrating, and do the learned weights transfer across behaviors within one model.</p>
+<p>Status: early-stage. The repo currently holds a Qwen2.5-1.5B harness and the idea. The interesting questions are still open: does the attention pick the same layers a sweep would, does spreading beat concentrating, and do the learned weights transfer across behaviors within one model.</p>
 
 </div>
 </body>

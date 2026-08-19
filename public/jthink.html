@@ -100,9 +100,9 @@
 
 <p><a href="https://transformer-circuits.pub/2026/workspace/index.html">"Verbalizable Representations Form a Global Workspace in Language Models"</a> argues that a transformer's layers split into three regions: early <em>sensory</em> layers that parse tokens into representations, a long middle <em>workspace</em> where those representations live in one shared, verbalizable geometry, and late <em>motor</em> layers that convert the state back into a next-token distribution.</p>
 
-<p>Now look at what thinking costs. In chain of thought, every reasoning step traverses all layers and then collapses into a single discrete token, which re-enters at the bottom. Soft-thinking methods (Coconut and friends) drop the token &mdash; the final hidden state is fed back in as the next input embedding &mdash; but each thought still makes the full round trip through the motor and sensory layers on every loop. If thinking happens in the workspace, both trips are overhead.</p>
+<p>Now look at what thinking costs. In chain of thought, every reasoning step traverses all layers and then collapses into a single discrete token, which re-enters at the bottom. Soft-thinking methods (Coconut and friends) drop the token (the final hidden state is fed back in as the next input embedding), but each thought still makes the full round trip through the motor and sensory layers on every loop. If thinking happens in the workspace, both trips are overhead.</p>
 
-<p>J-Think keeps the loop inside the workspace. On <b>Qwen3-4B</b> (36 layers; workspace &asymp; layers 6&ndash;28) the recurrent state exits at the top of the workspace and re-enters at its bottom, with everything outside replaced by linear maps: the <a href="https://github.com/anthropics/jacobian-lens">Jacobian lens</a> already gives a linear approximation of all the layers above the exit, and a small ridge-fit map stands in for the sensory layers below the entry. One latent thought = one pass through the 23 workspace layers plus three matrix multiplies &mdash; no token, no motor layers, no sensory layers.</p>
+<p>J-Think keeps the loop inside the workspace. On <b>Qwen3-4B</b> (36 layers; workspace &asymp; layers 6&ndash;28) the recurrent state exits at the top of the workspace and re-enters at its bottom, with everything outside replaced by linear maps: the <a href="https://github.com/anthropics/jacobian-lens">Jacobian lens</a> already gives a linear approximation of all the layers above the exit, and a small ridge-fit map stands in for the sensory layers below the entry. One latent thought = one pass through the 23 workspace layers plus three matrix multiplies: no token, no motor layers, no sensory layers.</p>
 
 <h2>First, does Qwen have a workspace?</h2>
 
@@ -119,7 +119,7 @@
 
 $$\hat h_{\text{fin}} \;=\; \mu_{\text{fin}} \;+\; J^{\text{mot}}\,\big(h_{28} - \mu_{\text{mot}}\big)$$
 
-<p>Second, the predicted final state is mapped back to embedding space. \(W_a\) is the least-squares map from unembedding to embedding rows &mdash; and because Qwen3-4B ties its embeddings, \(W_a \approx I\), which is exactly why this model was chosen:</p>
+<p>Second, the predicted final state is mapped back to embedding space. \(W_a\) is the least-squares map from unembedding to embedding rows, and because Qwen3-4B ties its embeddings, \(W_a \approx I\), which is exactly why this model was chosen:</p>
 
 $$e \;=\; \mathrm{RMSNorm}\big(\hat h_{\text{fin}}\big)\, W_a, \qquad W_a = \arg\min_W \big\lVert W_U W - W_E \big\rVert_F^2 \;\approx\; I$$
 
@@ -131,7 +131,7 @@ $$h_{\text{in}} \;=\; \mu_{\text{ent}} \;+\; J^{\text{in}}\,\big(e - \mu_e\big)$
 
 $$h_{28} \;\leftarrow\; \mathrm{Layers}_{6\ldots28}\big(h_{\text{in}}\big)$$
 
-<p>and the loop repeats for \(K\) latent steps. The KV cache grows only in the workspace layers &mdash; the latent positions literally do not exist for the sensory and motor layers. After \(K\) steps, the cue <i>"The answer is"</i> is fed through the full stack and the answer is decoded normally. (Sanity check: with \(K=0\) the manual single-position runner reproduces <code>model.generate</code> token-for-token.)</p>
+<p>and the loop repeats for \(K\) latent steps. The KV cache grows only in the workspace layers; the latent positions literally do not exist for the sensory and motor layers. After \(K\) steps, the cue <i>"The answer is"</i> is fed through the full stack and the answer is decoded normally. (Sanity check: with \(K=0\) the manual single-position runner reproduces <code>model.generate</code> token-for-token.)</p>
 
 <figure>
   <svg viewBox="0 0 640 430" xmlns="http://www.w3.org/2000/svg" font-family="'Gill Sans','Gill Sans MT',Calibri,'Helvetica Neue',Arial,sans-serif" font-size="13">
@@ -146,13 +146,13 @@ $$h_{28} \;\leftarrow\; \mathrm{Layers}_{6\ldots28}\big(h_{\text{in}}\big)$$
 
     <!-- chain-of-thought loop (right, grey dashed) -->
     <path d="M 428 44 H 548 V 384 H 432" fill="none" stroke="#9a9a9a" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#am)"/>
-    <text transform="rotate(90 566 214)" x="566" y="214" text-anchor="middle" fill="#9a9a9a">chain of thought &#8212; all 36 layers + a token, every step</text>
+    <text transform="rotate(90 566 214)" x="566" y="214" text-anchor="middle" fill="#9a9a9a">chain of thought: all 36 layers + a token, every step</text>
 
     <!-- latent loop (left, green) -->
     <path d="M 212 150 H 70 V 278 H 208" fill="none" stroke="#5f9b65" stroke-width="2.2" marker-end="url(#ag)"/>
-    <text x="130" y="140" text-anchor="middle" fill="#3e7a44" font-weight="600">J&#7504;&#7506;&#7511; &#8212; skip motor layers</text>
-    <text transform="rotate(-90 54 214)" x="54" y="214" text-anchor="middle" fill="#3e7a44" font-weight="600">W&#8336; &#8212; re-embed</text>
-    <text x="130" y="300" text-anchor="middle" fill="#3e7a44" font-weight="600">J&#8305;&#8319; &#8212; skip sensory layers</text>
+    <text x="130" y="140" text-anchor="middle" fill="#3e7a44" font-weight="600">J&#7504;&#7506;&#7511;: skip motor layers</text>
+    <text transform="rotate(-90 54 214)" x="54" y="214" text-anchor="middle" fill="#3e7a44" font-weight="600">W&#8336;: re-embed</text>
+    <text x="130" y="300" text-anchor="middle" fill="#3e7a44" font-weight="600">J&#8305;&#8319;: skip sensory layers</text>
     <text x="130" y="318" text-anchor="middle" fill="#3e7a44">&#215;K latent steps</text>
 
     <!-- the stack -->
@@ -178,14 +178,14 @@ $$h_{28} \;\leftarrow\; \mathrm{Layers}_{6\ldots28}\big(h_{\text{in}}\big)$$
     <line x1="320" y1="134" x2="320" y2="126" stroke="#b5b5b5" stroke-width="1.4" marker-end="url(#am)"/>
     <line x1="320" y1="72" x2="320" y2="64" stroke="#b5b5b5" stroke-width="1.4" marker-end="url(#am)"/>
   </svg>
-  <figcaption><b>The J-Think loop.</b> An ordinary chain-of-thought step (grey, right) climbs the whole stack, samples a token, and re-enters at the bottom. A latent step (green, left) exits at the top of the workspace and re-enters at its bottom: \(J^{\text{mot}}\) linearizes the motor layers, \(W_a\) re-embeds, and \(J^{\text{in}}\) linearizes the sensory layers &mdash; three matrix multiplies instead of 13 layers and a token.</figcaption>
+  <figcaption><b>The J-Think loop.</b> An ordinary chain-of-thought step (grey, right) climbs the whole stack, samples a token, and re-enters at the bottom. A latent step (green, left) exits at the top of the workspace and re-enters at its bottom: \(J^{\text{mot}}\) linearizes the motor layers, \(W_a\) re-embeds, and \(J^{\text{in}}\) linearizes the sensory layers: three matrix multiplies instead of 13 layers and a token.</figcaption>
 </figure>
 
 <h2>Does it help? (honestly: a little, once)</h2>
 
-<p>On GSM8K (200 problems, greedy decoding, 2-shot): answering directly with \(K=0\) latent steps scores <b>25%</b>. Turning the latent loop on lifts this to <b>&asymp;31%</b> &mdash; but the curve is flat in \(K\): 32.0% at \(K=8\), 30.5% at 16, 32.0% at 32, 31.5% at 64. More workspace-only thinking steps buy nothing. Text CoT at a matched token budget scales the way you'd want thinking to scale: 17% at 8 tokens, 23% at 16, 33% at 32, 58% at 64, and 89% uncapped (the natural CoT length here is &asymp;69 tokens). The crossover is around 24 tokens: below that budget, latent workspace thinking wins; above it, text wins and keeps climbing.</p>
+<p>On GSM8K (200 problems, greedy decoding, 2-shot): answering directly with \(K=0\) latent steps scores <b>25%</b>. Turning the latent loop on lifts this to <b>&asymp;31%</b>, but the curve is flat in \(K\): 32.0% at \(K=8\), 30.5% at 16, 32.0% at 32, 31.5% at 64. More workspace-only thinking steps buy nothing. Text CoT at a matched token budget scales the way you'd want thinking to scale: 17% at 8 tokens, 23% at 16, 33% at 32, 58% at 64, and 89% uncapped (the natural CoT length here is &asymp;69 tokens). The crossover is around 24 tokens: below that budget, latent workspace thinking wins; above it, text wins and keeps climbing.</p>
 
-<p>So the mechanics work &mdash; the workspace can be driven in a closed loop through purely linear bridges without leaving its manifold, and doing so delivers a real one-time lift over answering directly. What it doesn't do, training-free, is <em>compound</em>: the loop seems to hand the model a single "gist" of thought rather than accumulating computation step over step. The obvious suspects are the bridges themselves (linear, calibrated on WikiText, nothing task-specific) &mdash; training them, or re-entering at the KV level instead of the residual stream, is where I'd push next.</p>
+<p>So the mechanics work: the workspace can be driven in a closed loop through purely linear bridges without leaving its manifold, and doing so delivers a real one-time lift over answering directly. What it doesn't do, training-free, is <em>compound</em>: the loop seems to hand the model a single "gist" of thought rather than accumulating computation step over step. The obvious suspects are the bridges themselves (linear, calibrated on WikiText, nothing task-specific); training them, or re-entering at the KV level instead of the residual stream, is where I'd push next.</p>
 
 </div>
 </body>
