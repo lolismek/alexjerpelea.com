@@ -78,6 +78,17 @@
     color: #3a3a3a;
     margin: 0.5em 0 0;
   }
+  h2.section {
+    font-size: 1.45rem;
+    font-weight: 600;
+    margin: 2.4em 0 0.1em;
+  }
+  p.section-sub {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 1.3em;
+  }
   @media (max-width: 480px) {
     body { font-size: 16px; }
     h1.site-title { font-size: 1.8rem; }
@@ -108,6 +119,15 @@
   <h2>Reading list</h2>
   <p class="meta">57 papers &middot; updated August 2026</p>
   <p class="desc">Everything I consumed to learn mech interp: the ARENA course, learnmechinterp.com, and all the interp papers from my research notes.</p>
+</a>
+
+<h2 class="section">Other</h2>
+<p class="section-sub">small experiments and other work</p>
+
+<a class="card" href="/jthink.html">
+  <h2>J-Think: soft thinking only in the workspace</h2>
+  <p class="meta">July 2026</p>
+  <p class="desc">Latent chain-of-thought that never leaves the middle of the model: the thinking loop runs only through Qwen's workspace layers, with Jacobian-lens linear bridges skipping the sensory and motor layers entirely. The mechanics work and give a small lift over direct answering &mdash; but the lift doesn't grow with more steps.</p>
 </a>
 
 </div>

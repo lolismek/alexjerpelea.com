@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>J-Think: soft thinking only in the workspace</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '\\(', right: '\\)', display: false}
+  ]});"></script>
+<style>
+  :root {
+    --text: #1c1c1c;
+    --muted: #757575;
+    --link: #5f9b65;
+    --rule: #e0e0e0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--text);
+    font-family: Charter, Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .page {
+    max-width: 682px;
+    margin: 0 auto;
+    padding: 48px 20px 96px;
+  }
+  .back {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.9rem;
+  }
+  h1.site-title {
+    font-size: 2.35rem;
+    line-height: 1.18;
+    font-weight: 600;
+    margin: 0.6em 0 0.25em;
+    letter-spacing: -0.01em;
+  }
+  .byline {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 2.6em;
+  }
+  .byline b { color: #3a3a3a; font-weight: 600; }
+  p.intro {
+    margin: -1.4em 0 2.2em;
+    color: #3a3a3a;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 2.2em 0 0.6em;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid var(--rule);
+  }
+  figure { margin: 1.8em 0; }
+  figure img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  figure svg { width: 100%; height: auto; }
+  figcaption {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-top: 0.6em;
+  }
+  .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.2em 0; }
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    h1.site-title { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="back"><a href="/mech-interp.html">&larr; back to the mech-interp place</a></p>
+
+<h1 class="site-title">J-Think: soft thinking only in the workspace</h1>
+<div class="byline">by <b>Alex Jerpelea</b> &middot; July 2026 &middot; <a href="https://github.com/lolismek/j-think">code on GitHub</a></div>
+
+<p class="intro">A small experiment: latent chain-of-thought that never leaves the middle of the model. The recurrent loop runs only through Qwen's workspace layers, and the Jacobian lens lets us skip the sensory and motor layers entirely with three matrix multiplies.</p>
+
+<h2>The idea</h2>
+
+<p><a href="https://transformer-circuits.pub/2026/workspace/index.html">"Verbalizable Representations Form a Global Workspace in Language Models"</a> argues that a transformer's layers split into three regions: early <em>sensory</em> layers that parse tokens into representations, a long middle <em>workspace</em> where those representations live in one shared, verbalizable geometry, and late <em>motor</em> layers that convert the state back into a next-token distribution.</p>
+
+<p>Now look at what thinking costs. In chain of thought, every reasoning step traverses all layers and then collapses into a single discrete token, which re-enters at the bottom. Soft-thinking methods (Coconut and friends) drop the token &mdash; the final hidden state is fed back in as the next input embedding &mdash; but each thought still makes the full round trip through the motor and sensory layers on every loop. If thinking happens in the workspace, both trips are overhead.</p>
+
+<p>J-Think keeps the loop inside the workspace. On <b>Qwen3-4B</b> (36 layers; workspace &asymp; layers 6&ndash;28) the recurrent state exits at the top of the workspace and re-enters at its bottom, with everything outside replaced by linear maps: the <a href="https://github.com/anthropics/jacobian-lens">Jacobian lens</a> already gives a linear approximation of all the layers above the exit, and a small ridge-fit map stands in for the sensory layers below the entry. One latent thought = one pass through the 23 workspace layers plus three matrix multiplies &mdash; no token, no motor layers, no sensory layers.</p>
+
+<h2>First, does Qwen have a workspace?</h2>
+
+<p>Before any of that, the workspace has to exist in Qwen. Following the paper, I computed the linear CKA between the J-lens vector geometries of every pair of layers. The block structure replicates cleanly on Qwen3.5-4B (below) and Qwen3.6-27B: a small sensory block (layers 0&ndash;2), one long high-CKA workspace block spanning nearly all of the depth, and the motor stage at the very top. One difference from the paper's result on Claude Sonnet 4.5: Qwen's sensory block is proportionally much smaller (roughly the first 9% of depth vs. the first third).</p>
+
+<figure>
+  <img src="/img/jthink-cka.png" alt="CKA heatmap across layers of Qwen3.5-4B showing sensory block L0-L2 and workspace block L3-L30">
+  <figcaption><b>The workspace replicates on Qwen.</b> Linear CKA between J-lens vector geometries for every pair of layers in Qwen3.5-4B: a small sensory block (L0&ndash;L2), then one long workspace block (&asymp;L3&ndash;L30) with its brightest core around L6&ndash;L18.</figcaption>
+</figure>
+
+<h2>The latent step</h2>
+
+<p>Write \(h_{28}\) for the last-position hidden state at the workspace exit (layer 28). A vanilla soft-thinking step would run layers 29&ndash;35, unembed, re-embed, and run layers 0&ndash;5 again before the next thought. J-Think replaces that whole detour with linear bridges. First, the Jacobian-lens matrix at layer 28 stands in for the motor layers, predicting the final-layer state directly:</p>
+
+$$\hat h_{\text{fin}} \;=\; \mu_{\text{fin}} \;+\; J^{\text{mot}}\,\big(h_{28} - \mu_{\text{mot}}\big)$$
+
+<p>Second, the predicted final state is mapped back to embedding space. \(W_a\) is the least-squares map from unembedding to embedding rows &mdash; and because Qwen3-4B ties its embeddings, \(W_a \approx I\), which is exactly why this model was chosen:</p>
+
+$$e \;=\; \mathrm{RMSNorm}\big(\hat h_{\text{fin}}\big)\, W_a, \qquad W_a = \arg\min_W \big\lVert W_U W - W_E \big\rVert_F^2 \;\approx\; I$$
+
+<p>Third, a ridge-regression matrix \(J^{\text{in}}\), fit on WikiText prompts, stands in for the sensory layers, mapping the embedding straight to a workspace-entry state:</p>
+
+$$h_{\text{in}} \;=\; \mu_{\text{ent}} \;+\; J^{\text{in}}\,\big(e - \mu_e\big)$$
+
+<p>(The \(\mu\)'s are calibration means over WikiText; \(J^{\text{in}}\) has large gain, so \(h_{\text{in}}\) is rescaled to the typical entry-state norm to stay on the workspace manifold.) Then the state runs through the workspace only:</p>
+
+$$h_{28} \;\leftarrow\; \mathrm{Layers}_{6\ldots28}\big(h_{\text{in}}\big)$$
+
+<p>and the loop repeats for \(K\) latent steps. The KV cache grows only in the workspace layers &mdash; the latent positions literally do not exist for the sensory and motor layers. After \(K\) steps, the cue <i>"The answer is"</i> is fed through the full stack and the answer is decoded normally. (Sanity check: with \(K=0\) the manual single-position runner reproduces <code>model.generate</code> token-for-token.)</p>
+
+<figure>
+  <svg viewBox="0 0 640 430" xmlns="http://www.w3.org/2000/svg" font-family="'Gill Sans','Gill Sans MT',Calibri,'Helvetica Neue',Arial,sans-serif" font-size="13">
+    <defs>
+      <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#5f9b65"/>
+      </marker>
+      <marker id="am" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#9a9a9a"/>
+      </marker>
+    </defs>
+
+    <!-- chain-of-thought loop (right, grey dashed) -->
+    <path d="M 428 44 H 548 V 384 H 432" fill="none" stroke="#9a9a9a" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#am)"/>
+    <text transform="rotate(90 566 214)" x="566" y="214" text-anchor="middle" fill="#9a9a9a">chain of thought &#8212; all 36 layers + a token, every step</text>
+
+    <!-- latent loop (left, green) -->
+    <path d="M 212 150 H 70 V 278 H 208" fill="none" stroke="#5f9b65" stroke-width="2.2" marker-end="url(#ag)"/>
+    <text x="130" y="140" text-anchor="middle" fill="#3e7a44" font-weight="600">J&#7504;&#7506;&#7511; &#8212; skip motor layers</text>
+    <text transform="rotate(-90 54 214)" x="54" y="214" text-anchor="middle" fill="#3e7a44" font-weight="600">W&#8336; &#8212; re-embed</text>
+    <text x="130" y="300" text-anchor="middle" fill="#3e7a44" font-weight="600">J&#8305;&#8319; &#8212; skip sensory layers</text>
+    <text x="130" y="318" text-anchor="middle" fill="#3e7a44">&#215;K latent steps</text>
+
+    <!-- the stack -->
+    <rect x="215" y="28" width="210" height="32" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/>
+    <text x="320" y="48" text-anchor="middle" fill="#555">unembedding</text>
+
+    <rect x="215" y="72" width="210" height="50" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/>
+    <text x="320" y="101" text-anchor="middle" fill="#555">motor layers 29&#8211;35</text>
+
+    <rect x="215" y="134" width="210" height="160" rx="5" fill="#edf5ee" stroke="#5f9b65" stroke-width="1.6"/>
+    <text x="320" y="206" text-anchor="middle" fill="#3e7a44" font-weight="600">workspace</text>
+    <text x="320" y="226" text-anchor="middle" fill="#3e7a44">layers 6&#8211;28</text>
+
+    <rect x="215" y="306" width="210" height="50" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/>
+    <text x="320" y="335" text-anchor="middle" fill="#555">sensory layers 0&#8211;5</text>
+
+    <rect x="215" y="368" width="210" height="32" rx="5" fill="#f5f5f5" stroke="#c9c9c9"/>
+    <text x="320" y="388" text-anchor="middle" fill="#555">token embedding</text>
+
+    <!-- connectors up the stack -->
+    <line x1="320" y1="368" x2="320" y2="360" stroke="#b5b5b5" stroke-width="1.4" marker-end="url(#am)"/>
+    <line x1="320" y1="306" x2="320" y2="298" stroke="#b5b5b5" stroke-width="1.4" marker-end="url(#am)"/>
+    <line x1="320" y1="134" x2="320" y2="126" stroke="#b5b5b5" stroke-width="1.4" marker-end="url(#am)"/>
+    <line x1="320" y1="72" x2="320" y2="64" stroke="#b5b5b5" stroke-width="1.4" marker-end="url(#am)"/>
+  </svg>
+  <figcaption><b>The J-Think loop.</b> An ordinary chain-of-thought step (grey, right) climbs the whole stack, samples a token, and re-enters at the bottom. A latent step (green, left) exits at the top of the workspace and re-enters at its bottom: \(J^{\text{mot}}\) linearizes the motor layers, \(W_a\) re-embeds, and \(J^{\text{in}}\) linearizes the sensory layers &mdash; three matrix multiplies instead of 13 layers and a token.</figcaption>
+</figure>
+
+<h2>Does it help? (honestly: a little, once)</h2>
+
+<p>On GSM8K (200 problems, greedy decoding, 2-shot): answering directly with \(K=0\) latent steps scores <b>25%</b>. Turning the latent loop on lifts this to <b>&asymp;31%</b> &mdash; but the curve is flat in \(K\): 32.0% at \(K=8\), 30.5% at 16, 32.0% at 32, 31.5% at 64. More workspace-only thinking steps buy nothing. Text CoT at a matched token budget scales the way you'd want thinking to scale: 17% at 8 tokens, 23% at 16, 33% at 32, 58% at 64, and 89% uncapped (the natural CoT length here is &asymp;69 tokens). The crossover is around 24 tokens: below that budget, latent workspace thinking wins; above it, text wins and keeps climbing.</p>
+
+<p>So the mechanics work &mdash; the workspace can be driven in a closed loop through purely linear bridges without leaving its manifold, and doing so delivers a real one-time lift over answering directly. What it doesn't do, training-free, is <em>compound</em>: the loop seems to hand the model a single "gist" of thought rather than accumulating computation step over step. The obvious suspects are the bridges themselves (linear, calibrated on WikiText, nothing task-specific) &mdash; training them, or re-entering at the KV level instead of the residual stream, is where I'd push next.</p>
+
+</div>
+</body>
+</html>
